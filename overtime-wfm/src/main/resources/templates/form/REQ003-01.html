@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html th:replace="~{layouts/main :: layout(~{::main})}"
+	xmlns:th="http://www.thymeaf.org">
+
+
+<body id="page-top">
+
+	<main role="main">
+
+		<!-- Content Wrapper -->
+		
+
+		<!-- Begin Page Content -->
+		<div class="container-fluid">
+
+			<h1 class="h3 mb-1 text-gray-800 d-flex justify-content-center my-2">Pending
+				Record</h1>
+
+
+			<!-- DataTales Example -->
+			<div class=" shadow mb-4 ot-data">
+				<div class="card-header py-3 cardh">
+					<!-- Search From
+						<form th:action="@{}" 
+							class="form-inline col-md-offset-2 justify-content-between">
+							<div class="col-xl-3 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="date"
+										placeholder="From Date" th:field="${}"
+										onfocus="(this.type = 'date')">
+								</div>
+							</div>
+							<div class="col-xl-2 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="date"
+										placeholder="To Date" th:field="${}"
+										onfocus="(this.type = 'date')">
+								</div>
+							</div>
+							<div class="col-xl-2 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="search-all"
+										th:field="${}" placeholder="Project Name">
+								</div>
+							</div>
+							<div class="col-xl-2 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="search-all"
+										th:field="${}" placeholder="Staff Name">
+								</div>
+							</div>
+							<div class="col-xl-1 mb-2">
+								<div class="from-group float-right">
+									<input type="submit" class="btn btn-primary search-button"
+										value="Search" th:field="${}">
+								</div>
+							</div>
+						</form>
+						
+						 -->
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered text-dark-600 small"
+							id="dataTable" width="100%" cellspacing="0">
+							<thead>
+								<tr>
+									<th class="th">No</th>
+									<th class="th">Form ID</th>
+									<th class="th">Project Name</th>
+									<th class="th">Staff ID</th>
+									<th class="th">Staff Name</th>
+									<th class="th">Submitted Date</th>
+									<th class="th"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="p : ${pendingOtList}">
+									<td th:text="${pStat.index+1}"></td>
+									<td th:text="${p.formId}"></td>
+									<td th:text="${p.projects.name}"></td>
+									<td th:text="${p.staffs.staffId}"></td>
+									<td th:text="${p.staffs.name}"></td>
+									<td th:text="${p.submitted_date}"></td>
+									<td><a data-toggle="modal"
+										th:attr="data-target=${'#editModal'+p.id}" data-row="${p}">
+											<i class="fas fa-list fa-fw"></i>
+									</a>| <a data-toggle="modal" data-target="#workflow"><i
+											class="fas fa-user-check fa-fw"></i></a></td>
+
+
+
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+		<!-- End of Main Content -->
+
+
+
+
+		<!-- End of Content Wrapper -->
+
+
+
+		<!-- End of Page Wrapper -->
+
+		<!-- Scroll to Top Button-->
+		<a class="scroll-to-top rounded" href="#page-top"> <i
+			class="fas fa-angle-up"></i>
+		</a>
+
+		<div class="modal fade set-in-main-model" th:each="p : ${pendingOtList}"
+			th:attr="id=${'editModal' + p.id}" tabindex="-1"
+			aria-labelledby="detailModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="detailModalLabel">Pending
+							Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Start Date</th>
+													<th scope="col">End Date</th>
+													<th scope="col">Day</th>
+													<th scope="col">Start Hour</th>
+													<th scope="col">End Hour</th>
+													<th scope="col">Total Hour</th>
+													<th scope="col">Reason</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr th:each="detail : ${p.overtimeDetails}">
+													<td scope="row" th:text="${detailStat.index+1}">1</td>
+													<td th:text="${detail.startDate}"></td>
+													<td th:text="${detail.endDate}"></td>
+													<td th:text="${detail.dayType}"></td>
+													<td th:text="${detail.startTime}"></td>
+													<td th:text="${detail.endTime}"></td>
+													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.reason}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<!--Approval  -->
+							<form th:action="@{/decision}" th:object="${workflow}"
+								th:method="post">
+								<div class="row ml-3">
+									
+									<input type="hidden" th:value="${p.id}" name="otId" id="otId">
+									<input type="hidden" th:value="${p.id}" name="id" id="id">
+									
+									
+									<div class="form-group row col-md-6 mb-5">
+										<label for="status"
+											class="col-md-4 col-form-label pr-0 text-left">Decision</label>
+										<div class="col-md-7 textBox">
+											<select class="form-control textbox" th:field="*{otStatus}">
+												<option th:value="${T(com.ot.model.OvertimeStatus).APPROVE}" class="form-control">APPROVE</option>
+												<option th:value="${T(com.ot.model.OvertimeStatus).REVISE}" class="form-control">REVISE</option>
+												<option th:value="${T(com.ot.model.OvertimeStatus).REJECT}" class="form-control">REJECT</option>
+											</select>
+										</div>
+										
+									</div>
+
+
+									<div class="form-group row col-md-6">
+										<label for="sname"
+											class="col-md-6 col-form-label pr-0 text-left">Next
+											Approver</label>
+										<div class="col-md-6 mt-2">
+											<input type="text" class="form-control textbox">
+										</div>
+									</div>
+
+								</div>
+
+
+								<div class="row ml-2 textbox text-dark-600">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="exampleFormControlTextarea3" class="mt-3">Remark</label>
+											<textarea class="form-control"
+												id="exampleFormControlTextarea3" rows="7"
+												th:field="*{remark}" th:value="${remark}"></textarea>
+												<span th:if="${error}" th:text="${error}" class="text-danger"></span>
+										</div>
+										<div class="form-group row text-right">
+											<div class="col">
+												<button type="submit" class="btn btn-primary btn-customized">Apply</button>
+												<button type="submit" class="btn btn-primary btn-customized">Cancel</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2"></div>
+									<div class="col-md-4"></div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 
+
+    <div class="modal fade set-in-main-model" id="workflow" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content detail-in-modal text-dark">
+                <div class="modal-header text-center ">
+                    <h5 class="modal-title w-100" id="detailModalLabel">Work Flow Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+
+
+                        <form class="center">
+
+                          
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive my-3">
+                                        <table class="table-borderless table table-striped model-table text-dark-600 small">
+                                            <thead class="text-dark">
+                                                <th scope="col">No</th>
+                                                <th scope="col">Request By</th>
+                                                <th scope="col">Recieve By</th>
+                                                <th scope="col">Transition Date</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Remark</th>
+
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">1</th>
+
+                                                    <td>Programmer</td>
+                                                    <td>Project Manager</td>
+                                                    <td>01-01-2021</td>
+                                                    <td>Pending</td>
+                                                    <td >wwwwwwwwwwwwwnnnnnnnwww</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">1</th>
+
+                                                    <td>Programmer</td>
+                                                    <td>Project Manager</td>
+                                                    <td>01-01-2021</td>
+                                                    <td>Approve</td>
+                                                    <td><div class="content"></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">1</th>
+
+                                                    <td>Project Manager</td>
+                                                    <td>Department Head</td>
+                                                    <td>01-01-2021</td>
+                                                    <td>Approve</td>
+                                                    <td>-</td>
+                                                </tr>
+                                              
+                                              
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+          
+                    </div>
+                    </form>
+                </div>
+
+            </div>
+          
+        </div>
+    </div>
+    </div>
+    
+    -->
+
+	</main>
+
+</body>
+
+</html>

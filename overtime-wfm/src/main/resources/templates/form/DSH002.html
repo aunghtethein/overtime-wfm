@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{layouts/main  :: layout (~{::main})}"
+	xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<main role="main">
+
+		<div class="container-fluid">
+
+			<!-- Page Heading -->
+			<div
+				class="d-sm-flex align-items-center justify-content-between mb-4">
+				<h4 class="h3 mb-0 text-gray-800">Manage OverTime</h4>
+
+			</div>
+
+			<div class="row">
+
+				<!-- card1 -->
+				<div class="col-xl-3 col-md-6 item mb-3">
+
+					<div class="card item-card card-block card1">
+
+						<div class="row align-items-start"></div>
+
+						<a th:href="@{/approve}" style="text-decoration: none;">
+
+							<div class="row align-items-center">
+								<div class="square1 ml-5 card">
+									<div class="col icon_card">
+										<i class="fa-solid fa-location-arrow fa-2x mt-2 mr-1"></i>
+									</div>
+								</div>
+								<div class="col">
+									<h5 class="card-title mt-3 mb-3" th:text="${approveCount}"></h5>
+									<p class="card-text">Approved</p>
+								</div>
+								<div class="col"></div>
+							</div>
+						</a>
+
+						<div class="row align-items-end"></div>
+
+					</div>
+				</div>
+
+
+				<div class="col-xl-3 col-md-6 item mb-3">
+
+					<div class="card item-card card-block card2">
+
+						<div class="row align-items-start"></div>
+
+						<a th:href="@{/reject}" style="text-decoration: none;">
+
+							<div class="row align-items-center ">
+								<div class="square2 ml-5 card">
+									<div class="col icon_card">
+										<i class="fa-solid fa-ban fa-2x mt-2"> </i>
+									</div>
+								</div>
+								<div class="col">
+									<h5 class="card-title mt-3 mb-3" th:text="${rejectCount}"></h5>
+									<p class="card-text">Rejected</p>
+								</div>
+								<div class="col"></div>
+							</div>
+						</a>
+
+						<div class="row align-items-end"></div>
+
+					</div>
+				</div>
+
+
+
+				<!-- card3 -->
+				<div class="col-xl-3 col-md-6 item mb-3">
+
+					<div class="card item-card card-block card3">
+
+						<div class="row align-items-start"></div>
+
+						<a th:href="@{/pending}" style="text-decoration: none;">
+
+
+							<div class="row align-items-center">
+								<div class="square3 ml-5 card">
+									<div class="col icon_card">
+										<i class="fa-solid fa-comment fa-2x mt-2"></i>
+									</div>
+								</div>
+								<div class="col">
+									<h5 class="card-title mt-3 mb-3" th:text="${pendingCount}"></h5>
+									<p class="card-text">Pending</p>
+								</div>
+								<div class="col"></div>
+							</div>
+
+						</a>
+						<div class="row align-items-end"></div>
+
+					</div>
+				</div>
+				<!-- card4 -->
+				<div class="col-xl-3 col-md-6 item">
+
+					<div class="card item-card card-block card4">
+
+						<div class="row align-items-start"></div>
+						<a th:href="@{/revise}" style="text-decoration: none;">
+
+
+							<div class="row align-items-center">
+								<div class="square4 ml-5 card">
+									<div class="col icon_card">
+										<i class="fa-solid fa-share fa-2x mt-2"></i>
+									</div>
+								</div>
+								<div class="col">
+									<h5 class="card-title mt-3 mb-3" th:text="${reviseCount}"></h5>
+									<p class="card-text">Revise</p>
+								</div>
+								<div class="col"></div>
+							</div>
+						</a>
+						<div class="row align-items-end"></div>
+
+					</div>
+				</div>
+
+			</div>
+
+			<!-- Content Row -->
+
+<!--Chart  -->
+			<div class="row mt-3">
+				<div class="item-card card-block mb-5 col-md-9 mt-3 text-center">
+					<div class="card-header">
+						<ul class="nav nav-tabs card-header-tabs">
+							<li class="nav-item"><a class="nav-link active" th:href="@{/home/dsh002}">My
+									OT</a></li>
+							<li class="nav-item"><a class="nav-link" th:href="@{/home/dsh002/manageot}">Manage
+									OT</a></li>
+
+						</ul>
+					</div>
+					<div class="card-body my-5">
+						<div class="" id="graph"
+							style="width: 550px; height: 400px; margin: 0 auto"></div>
+					</div>
+				</div>
+			
+
+				<!--My OT Record Count  -->
+
+				<div class="col-md-3 ">
+				
+					<fieldset class="form-group border p-3 responsive-fieldset">
+						<legend class="w-auto px-2">My OT Record</legend>
+						
+						<!-- card 3 -->
+						<div class="col-md-12 item mb-3">
+
+							<div class="card item-card card-block card7">
+
+								<div class="row align-items-start"></div>
+
+								<a th:href="@{/myPendingOt}" style="text-decoration: none;">
+
+									<div class="row align-items-center ">
+										<div class="square7 mb-5 ml-4 card7">
+											
+										</div>
+										<div class="col">
+											<h5 class="card-title mt-3 mb-1" th:text="${myPendingCount}"></h5>
+											<p class="card-text">Pending</p>
+										</div>
+										<div class="col"></div>
+									</div>
+								</a>
+
+								<div class="row align-items-end"></div>
+
+							</div>
+						</div>
+						
+						<!-- card 1 -->
+						<div class="col-md-12 item mb-3">
+
+							<div class="card item-card card-block card5 form-group">
+
+								<div class="row align-items-start"></div>
+
+								<a th:href="@{/myApproveOt}" style="text-decoration: none;">
+
+									<div class="row align-items-center ">
+										<div class="square1 mb-5 ml-4 card5">
+											
+										</div>
+										<div class="col">
+											<h5 class="card-title mt-3 mb-1" th:text="${myApproveCount}"></h5>
+											<p class="card-text">Approved</p>
+										</div>
+										<div class="col"></div>
+									</div>
+								</a>
+								<div class="row align-items-end"></div>
+							</div>
+						</div>
+						
+						<!-- card 2 -->
+						<div class="col-md-12 item mb-3">
+
+							<div class="card item-card card-block card6">
+
+								<div class="row align-items-start " ></div>
+
+								<a th:href="@{/myRejectOt}" style="text-decoration: none;">
+
+									<div class="row align-items-center ">
+										<div class="square6 mb-5 ml-4 card6">
+											
+										</div>
+										<div class="col">
+											<h5 class="card-title mt-3 mb-1" th:text="${myRejectCount}"></h5>
+											<p class="card-text">Reject</p>
+										</div>
+										<div class="col"></div>
+									</div>
+								</a>
+
+								<div class="row align-items-end"></div>
+
+							</div>
+						</div>
+					
+						<!-- card 4 -->
+						<div class="col-md-12 item mb-3">
+
+							<div class="card item-card card-block card8">
+
+								<div class="row align-items-start"></div>
+
+								<a th:href="@{/myReviseOt}" style="text-decoration: none;">
+
+									<div class="row">
+										<div class="square8 mb-5 mt-3 ml-4 card8">
+											
+										</div>
+										<div class="col">
+											<h5 class="card-title mt-3 mb-1" th:text="${myReviseCount}"></h5>
+											<p class="card-text ">Revise</p>
+										</div>
+										<div class="col"></div>
+									</div>
+								</a>
+
+								<div class="row align-items-end"></div>
+
+							</div>
+						</div>
+					</fieldset>
+				</div>
+					</div>
+				<!-- /.container-fluid -->
+			</div>
+		
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script type="text/javascript" th:inline="javascript">
+			$(function() {
+				Highcharts
+						.chart(
+								'graph',
+								{
+
+									chart : {
+										type : 'column'
+									},
+									title : {
+										text : 'Organization'
+									},
+									subtitle : {
+										text : 'Details'
+									},
+									xAxis : {
+										/*[+
+										categories: [[${name}]],
+										+]*/
+										crosshair : true
+									},
+									yAxis : {
+										min : 0,
+										max : 50,
+										title : {
+											text : 'OT'
+										}
+									},
+									tooltip : {
+										headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
+										pointFormat : '<tr><td style="color:{series.color};padding:0">{series.name}: </td>'
+												+ '<td style="padding:0"><b>{point.y:.1f} Hour</b></td></tr>',
+										footerFormat : '</table>',
+										shared : true,
+										useHTML : true
+									},
+									plotOptions : {
+										column : {
+											pointPadding : 0.2,
+											borderWidth : 0
+										}
+									},
+									series : [ {
+										name : 'OT Hour',
+									/*[+
+									data: [[${ot}]]
+									+]*/
+									} ]
+								});
+			});
+		</script>
+
+	</main>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layouts/main :: layout(~{::main})}">
+
+
+<body>
+	<main role="main">
+
+
+		<div class="container-fluid">
+			<!-- Division-->
+
+			<div class="container jumbotron">
+				<div class="container mt-4 ">
+					<div class="row">
+						<div class="col-sm-6 mb-3">
+							<div class="card card-list1 ">
+								<div class="card-body">
+
+									<h5 class="card-title">Team Structure File</h5>
+									<form th:action="@{/file}" enctype="multipart/form-data" method="post" th:object="${teamStructure}">
+										<div class="card-text">
+											<div class="form-group my-3">
+												<input type="file" class="form-control" id="fileUpload" placeholder="Upload File"
+												name="uploadfile"></input>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary float-right">
+											<i class="fa-solid fa-arrow-up-from-bracket fa-1.5x"></i>
+											Upload
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 mb-3">
+							<div class="card card-list2">
+								<div class="card-body">
+									<h5 class="card-title">Salary File</h5>
+									<form th:action="@{/salary}" enctype="multipart/form-data" method="post">
+										<div class="card-text">
+											<div class="form-group my-3">
+											<input type="file" class="form-control" id="uploadSalary" placeholder="Upload File"
+												name="uploadSalary"></input>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary float-right">
+											<i class="fa-solid fa-arrow-up-from-bracket fa-1.5x"></i>
+											Upload
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+
+	</main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layouts/main :: layout(~{::main})}">
+
+<body>
+
+	<main role="main">
+		<div class="container-fluid">
+
+			<!-- Page Heading -->
+			<div
+				class="d-sm-flex align-items-center justify-content-between mb-4">
+				<h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+			</div>
+			<!-- Content Row -->
+			<div class="row ml-3 mb-3">
+
+				<!-- card1 -->
+				<div class="col-md-4 col-sm-6 item mb-3">
+
+					<div class="card item-card card-block card1">
+
+						<div class="row align-items-start"></div>
+
+						<div class="row align-items-center">
+							<div class="square1 ml-5 card">
+								<div class="col icon_card">
+									<i class="fa-solid fa-user fa-2x mt-2"></i>
+								</div>
+							</div>
+							<div class="col">
+								<h5 class="card-title mt-5 text-center">Total Staff</h5>
+								<p class="card-text" th:text="${staff}"></p>
+
+							</div>
+							<div class="col"></div>
+						</div>
+						<div class="row align-items-end"></div>
+					</div>
+				</div>
+				<!-- card2 -->
+				<div class="col-md-4 col-sm-6 item mb-3">
+
+					<div class="card item-card card-block card3">
+
+						<div class="row align-items-start"></div>
+
+						<div class="row align-items-center">
+							<div class="square3 ml-5 card">
+								<div class="col icon_card">
+									<i class="fa-solid fa-gears fa-2x mt-2"></i>
+								</div>
+							</div>
+							<div class="col">
+								<h5 class="card-title mt-5 text-center">Total Project</h5>
+								<p class="card-text" th:text="${project}"></p>
+							</div>
+							<div class="col"></div>
+						</div>
+						<div class="row align-items-end"></div>
+
+					</div>
+				</div>
+				<!-- card3 -->
+				<div class="col-md-4 col-sm-6 item mb-3">
+
+					<div class="card item-card card-block card4">
+
+						<div class="row align-items-start"></div>
+
+						<div class="row align-items-center">
+							<div class="square4 ml-5 card">
+								<div class="col icon_card">
+									<i class="fa-solid fa-users fa-2x mt-2"></i>
+								</div>
+							</div>
+							<div class="col">
+								<h5 class="card-title mt-5 text-center">Total Team</h5>
+								<p class="card-text" th:text="${team}"></p>
+							</div>
+							<div class="col"></div>
+						</div>
+						<div class="row align-items-end"></div>
+
+					</div>
+				</div>
+			</div>
+			<!-- Table -->
+			<!-- Begin Page Content -->
+			<div class="container-fluid">
+
+				<!-- Page Heading -->
+				<h1 class="h3 mb-4 text-gray-800 text-center">Top 10 New
+					Project</h1>
+
+
+				<!-- DataTales Example -->
+				<div class="shadow ot-data">
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered text-center" width="100%"
+								cellspacing="0">
+								<thead>
+									<tr>
+										<th class="th">No</th>
+										<th class="th">Project ID</th>
+										<th class="th">Project Name</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr th:each="list : ${list}">
+
+										<!--  <td>1</td>
+                                                <td>DAT_xxxxx</td>
+                                                <td>Aeon</td> -->
+										<td th:text="${listStat.index+1}"></td>
+
+										<td th:text="${list.name}"></td>
+										<td th:text="${list.projectId}"></td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- /.container-fluid -->
+			<!-- Table End -->
+		</div>
+	</main>
+</body>
+</html>

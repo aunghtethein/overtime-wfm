@@ -1,0 +1,15 @@
+
+.model-table{
+    border-radius: 10px;
+}
+
+.detail-in-modal{
+    background-color:white;
+    border-radius: 20px;
+    border: 2px solid;
+    margin-top: 15%;
+}
+.content{
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}

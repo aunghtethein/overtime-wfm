@@ -1,0 +1,58 @@
+/* Body customize */
+.ot-data {
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 25px;
+    border: 2px solid #7793F7;
+}
+
+/* Date input box customize */
+#date {
+    border: 2px solid #7793F7;
+    display: block;
+    padding: 15px 25px;
+    width: 200px;
+    outline: none;
+    color: black;
+    border-radius: 15px;
+    text-align: center;
+    transition: 250ms width ease, 250ms border-color ease;
+}
+/* Search for all data input box customize */
+#search-all {
+    border: 2px solid #7793F7;
+    display: block;
+    padding: 15px 25px;
+    width: 200px;
+    outline: none;
+    color: black;
+    border-radius: 15px;
+    transition: 250ms width ease, 250ms border-color ease;
+}
+/* Search button customize */
+.search-button {
+    border-radius: 10px;
+}
+/* Table Header */
+thead {
+    background-color: #CFD9FA;
+}
+/* Table row line */
+tr {
+    outline: thin solid #E8E6E6;
+}
+/* View button */
+button,.button {
+    background-color: #8293F5 !important;
+    border: none !important;
+}
+/* icon */
+i {
+    color: black;
+}
+
+.bootstrap-select .btn {
+	background-color: white !important;
+	color: black !important;
+	border: 1px solid gray !important;
+}
+

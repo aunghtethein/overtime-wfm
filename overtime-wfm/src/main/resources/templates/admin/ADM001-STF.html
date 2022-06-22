@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layouts/main :: layout(~{::main})}">
+
+<body id="page-top">
+	<main role="main">
+		<div class="container-fluid">
+
+			<!-- Division-->
+
+			<div class="container jumbotron">
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-12">
+						<h3 class="d-flex justify-content-center">Staff Setup</h3>
+
+						<form th:action="@{/adminStaff/add}" method="post"
+							th:object="${staffAdd}">
+
+							<div class="form-group row">
+								<div class="col md-2"></div>
+								<label for="id" class="col-md-2">Staff ID</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="id" id="id"
+										placeholder="Enter Staff ID" th:field="*{staffId}"
+										th:readonly="${button!=0}">
+
+								</div>
+								<div class="col-md-4">
+									<span id="errormsg" th:text="${error}" th:if="${error}"
+										class="text-danger"></span> <span
+										th:if="${#fields.hasErrors('staffId')}" th:errors="*{staffId}"
+										class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col md-2"></div>
+								<label for="name" class="col-md-2">Staff Name</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="name" id="name"
+										placeholder="Enter Staff Name" th:field="*{name}">
+
+								</div>
+								<div class="col-md-4">
+									<!-- <span id="errormsg" th:text="${error}" th:if="${error}"
+										class="text-danger"></span>  -->
+									<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+										class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col md-2"></div>
+								<label for="salary" class="col-md-2">Salary</label>
+								<div class="col-md-4">
+									<input type="number" class="form-control" name="salary"
+										id="salary" placeholder="Enter Salary" th:field="*{salary}">
+
+								</div>
+								<div class="col-md-4">
+									<!-- <span id="errormsg" th:text="${salaryError}" th:if="${salaryError}"
+										class="text-danger"></span> -->
+									<span th:if="${#fields.hasErrors('salary')}"
+										th:errors="*{salary}" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col md-2"></div>
+								<label for="name" class="col-md-2">Password</label>
+								<div class="col-md-4">
+									<input type="password" class="form-control" name="name"
+										id="name" placeholder="Enter Password" th:field="*{password}">
+
+								</div>
+								<div class="col-md-4">
+									<!-- <span id="errormsg" th:text="${error}" th:if="${error}"
+										class="text-danger"></span>  -->
+									<span th:if="${#fields.hasErrors('password')}"
+										th:errors="*{password}" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col md-2"></div>
+								<label for="name" class="col-md-2">Project Name</label>
+								<div class="col-md-4">
+
+									<select th:field="*{projects}"
+										class="form-select selectpicker"
+										multiple="multiple" data-live-search="true" title="Select">
+										<option th:each="prj : ${prjList}" th:text="${prj.name}"
+											th:value="${prj.id}"></option>
+									</select>
+
+								</div>
+								<div class="col-md-4">
+									<span id="errormsg" th:text="${prjError}" th:if="${prjError}"
+										class="text-danger"></span> <span
+										th:if="${#fields.hasErrors('projects')}"
+										th:errors="*{projects}" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-2"></div>
+								<label for="name" class="col-md-2">Team Name</label>
+								<div class="col-md-4">
+
+									<select th:field="*{teams}"
+										class="form-select selectpicker"
+										multiple="multiple" data-live-search="true" title="Select">
+										<option th:each="tem : ${teamList}" th:text="${tem.name}"
+											th:value="${tem.id}"></option>
+
+									</select>
+
+
+								</div>
+								<div class="col-md-4">
+									<span id="errormsg" th:text="${teamError}" th:if="${teamError}"
+										class="text-danger"></span> <span
+										th:if="${#fields.hasErrors('teams')}" th:errors="*{teams}"
+										class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-2"></div>
+								<label for="name" class="col-md-2">Role</label>
+								<div class="col-md-4">
+
+									<select th:field="*{roles}"
+										class="form-select selectpicker"
+										data-live-search="true" title="Select">
+										<option th:each="role : ${roleList}" th:text="${role.name}"
+											th:value="${role.id}"></option>
+									</select>
+
+
+								</div>
+								<div class="col-md-4">
+									<span id="errormsg" th:text="${teamError}" th:if="${teamError}"
+										class="text-danger"></span> <span
+										th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
+										class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col md-2"></div>
+								<label for="name" class="col-md-2">Position</label>
+								<div class="col-md-4">
+
+									<select th:field="*{positions}" class="selectpicker"
+										data-live-search="true" title="Select">
+										<option th:each="posi : ${posiList}" th:text="${posi.name}"
+											th:value="${posi.id}">Select</option>
+
+									</select>
+									<button type="submit" th:if="${button == 0}"
+										class="btn btn-primary btn-md btn-block mt-3 ml-1">Add</button>
+									<button type="submit" th:if="${button != 0}"
+										th:formaction="@{/adminStaff/add/(id=${button})}"
+										class="btn btn-primary  mt-3 ml-1">Update</button>
+									<a type="button" th:if="${button != 0}"
+										th:href="@{/adminStaff}"
+										class="btn btn-primary button mt-3 ml-1">Back</a>
+								</div>
+								<input type="hidden" name="id" th:field="*{id}" />
+								<div class="col-md-4">
+									<span id="errormsg" th:text="${posError}" th:if="${posError}"
+										class="text-danger"></span> <span
+										th:if="${#fields.hasErrors('positions')}"
+										th:errors="*{positions}" class="text-danger"></span>
+								</div>
+							</div>
+
+						</form>
+					</div>
+
+				</div>
+			</div>
+			<div class=" shadow mb-4">
+				<div class="card-body">
+					<div class="table-responsive text-center text-gray-600 small">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th class="th">No</th>
+									<th class="th">Staff ID</th>
+									<th class="th">Staff Name</th>
+									<th class="th">Salary</th>
+									<th class="th">Project Name</th>
+									<th class="th">Team Name</th>
+									<th class="th">Position</th>
+									<th class="th">Role</th>
+									<th class="th">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="staffList : ${list}">
+									<td th:text="${staffListStat.index+1}"></td>
+									<td th:text="${staffList.staffId}"></td>
+									<td th:text="${staffList.name}"></td>
+									<td th:text="${staffList.salary}"></td>
+									<td th:text="${staffList.projects}"></td>
+									<td th:text="${staffList.teams}"></td>
+									<td th:text="${staffList.positions}"></td>
+									<td th:text="${staffList.roles}"></td>
+									<td><a th:href="@{/adminStaff/update(id=${staffList.id})}">
+											<i class="fa-solid fa-pen-to-square"></i>
+									</a> | <a th:href="@{/adminStaff/delete(id=${staffList.id})}">
+											<i class="fa-solid fa-trash"></i>
+									</a></td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- /.container-fluid -->
+
+
+		<!-- End of Main Content -->
+	</main>
+
+</body>
+
+</html>

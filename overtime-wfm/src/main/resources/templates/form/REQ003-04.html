@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html th:replace="~{layouts/main :: layout(~{::main})}"
+	xmlns:th="http://www.thymeaf.org">
+
+
+<body id="page-top">
+
+	<main role="main">
+
+		<!-- Content Wrapper -->
+		<!-- Begin Page Content -->
+		<div class="container-fluid">
+
+			<h1 class="h3 mb-1 text-gray-800 d-flex justify-content-center my-2">Approved
+				Record</h1>
+
+
+			<!-- DataTales Example -->
+			<div class=" shadow mb-4 ot-data">
+				<div class="card-header py-3 cardh"></div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered text-dark-600 small"
+							id="dataTable" width="100%" cellspacing="0">
+							<thead>
+								<tr>
+									<th class="th">No</th>
+									<th class="th">Form ID</th>
+									<th class="th">Project Name</th>
+									<th class="th">Staff ID</th>
+									<th class="th">Staff Name</th>
+									<th class="th">Submitted Date</th>
+									 <th class="th"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="a : ${approveOtList}">
+									<td th:text="${aStat.index+1}"></td>
+									<td th:text="${a.formId}"></td>
+									<td th:text="${a.projects.name}"></td>
+									<td th:text="${a.staffs.staffId}"></td>
+									<td th:text="${a.staffs.name}"></td>
+									<td th:text="${a.submitted_date}"></td>
+									<td><a data-toggle="modal"
+										th:attr="data-target=${'#editModal'+a.id}" data-row="${a}">
+											<i class="fas fa-list fa-fw"></i>
+									</a>|<a data-toggle="modal" data-target="#workflow"><i
+											class="fas fa-user-check fa-fw"></i></a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End of Main Content -->
+
+		<!-- Scroll to Top Button-->
+		<a class="scroll-to-top rounded" href="#page-top"> <i
+			class="fas fa-angle-up"></i>
+		</a>
+
+		<div class="modal fade set-in-main-model"
+			th:each="a : ${approveOtList}" th:attr="id=${'editModal' + a.id}"
+			tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="detailModalLabel">Detail
+							Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Start Date</th>
+													<th scope="col">End Date</th>
+													<th scope="col">Day</th>
+													<th scope="col">Start Hour</th>
+													<th scope="col">End Hour</th>
+													<th scope="col">Total Hour</th>
+													<th scope="col">Reason</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr th:each="detail : ${a.overtimeDetails}">
+													<td scope="row" th:text="${detailStat.index+1}"></td>
+													<td th:text="${detail.startDate}"></td>
+													<td th:text="${detail.endDate}"></td>
+													<td th:text="${detail.dayType}"></td>
+													<td th:text="${detail.startTime}"></td>
+													<td th:text="${detail.endTime}"></td>
+													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.reason}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</main>
+
+</body>
+
+</html>

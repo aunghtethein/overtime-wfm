@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{layouts/main  :: layout (~{::main})}"
+	xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<main role="main">
+		<div class="container">
+			 <div class="row mt-5">
+                       <div class="col-md-4">
+                           <h4>Data Graph</h4>
+                       </div>
+                       <div class="col-md-8">
+                       	
+                       </div>
+               </div>
+               <div class="row mt-5">
+               		<div id="graph" style="width: 550px; height: 400px; margin: 0 auto">
+					</div>
+               </div>
+		</div>
+
+
+
+		<script
+			src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script type="text/javascript" th:inline="javascript">
+			$(function() {
+				Highcharts
+						.chart(
+								'graph',
+								{
+
+									chart : {
+										type : 'column'
+									},
+									title : {
+										text : 'Organization'
+									},
+									subtitle : {
+										text : 'Details'
+									},
+									xAxis : {
+										/*[+
+										categories: [[${project}]],
+										+]*/
+										crosshair : true
+									},
+									yAxis : {
+										min : 0,
+										max : 100,
+										title : {
+											text : 'OT'
+										}
+									},
+									tooltip : {
+										headerFormat : '<span style="font-size:10px">{point.key}</span><table>',
+										pointFormat : '<tr><td style="color:{series.color};padding:0">{series.name}: </td>'
+												+ '<td style="padding:0"><b>{point.y:.1f} Hour</b></td></tr>',
+										footerFormat : '</table>',
+										shared : true,
+										useHTML : true
+									},
+									plotOptions : {
+										column : {
+											pointPadding : 0.2,
+											borderWidth : 0
+										}
+									},
+									series : [ {
+										name : 'OT Hour',
+									/*[+
+									data: [[${ot}]]
+									+]*/
+									} ]
+								});
+			});
+		</script>
+		<div class="container ml-10">
+			<a href="#" th:href="@{/}" class="btn btn-secondary">Back</a>
+		</div>
+	</main>
+</body>
+</html>

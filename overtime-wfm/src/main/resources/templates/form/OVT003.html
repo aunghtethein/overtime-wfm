@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+
+<html th:replace="~{layouts/main :: layout(~{::main})}"
+	xmlns:th="http://www.thymeaf.org">
+
+
+<body id="page-top">
+
+	<main role="main">
+
+		<!-- Begin Page Content -->
+		<div class="container-fluid">
+
+			<!-- Page Heading -->
+			<!-- Page Heading -->
+			<!--<h1 class="h3 mb-2 text-gray-800 d-flex justify-content-center my-5">My
+				Overtime Record</h1> -->
+
+
+			<!-- DataTales Example -->
+			<div class=" shadow mb-4 ot-data">
+				<div class="card-header py-3 cardh">
+					<!-- Search From
+						<form th:action="@{}" 
+							class="form-inline col-md-offset-2 justify-content-between">
+							<div class="col-xl-3 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="date"
+										placeholder="From Date" th:field="${}"
+										onfocus="(this.type = 'date')">
+								</div>
+							</div>
+							<div class="col-xl-2 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="date"
+										placeholder="To Date" th:field="${}"
+										onfocus="(this.type = 'date')">
+								</div>
+							</div>
+							<div class="col-xl-2 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="search-all"
+										th:field="${}" placeholder="Project Name">
+								</div>
+							</div>
+							<div class="col-xl-2 mb-2">
+								<div class="from-group float-right">
+									<input type="text" class="form-control" id="search-all"
+										th:field="${}" placeholder="Staff Name">
+								</div>
+							</div>
+							<div class="col-xl-1 mb-2">
+								<div class="from-group float-right">
+									<input type="submit" class="btn btn-primary search-button"
+										value="Search" th:field="${}">
+								</div>
+							</div>
+						</form>
+						
+						 -->
+				</div>
+
+				<div class="card-body">
+					<div class="table-responsive">
+						<div th:unless="${#lists.isEmpty(myotlist)}">
+							<table class="table table-bordered text-dark-600 small"
+								id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th class="th">No</th>
+										<th class="th">Form ID</th>
+										<th class="th">Project ID</th>
+										<th class="th">Project Name</th>
+										<th class="th">Next Approver</th>
+										<th class="th">Status</th>
+										<th class="th"></th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="o : ${myotlist}">
+										<td th:text="${oStat.index+1}"></td>
+										<td th:text="${o.formId}"></td>
+										<td th:text="${o.projects.projectId}"></td>
+										<td th:text="${o.projects.name}"></td>
+										<td th:text="${o.currentNext}"></td>
+										<td th:text="${o.otStatus}"></td>
+										<td><a data-toggle="modal"
+											th:attr="data-target=${'#editModal'+o.id}" data-row="${o}">
+												<i class="fas fa-list fa-fw"></i>
+
+										</a> | <a th:href="@{history/{id}(id=${o.id})}">
+										
+									<!-- 	data-toggle="modal"
+											th:attr="data-object-id=''+${o.id}+'', data-object-name='/history?id='+${o.id}+'', data-target='#historyModal'" -->
+												<i class="fas fa-user-check fa-fw"></i>
+										</a> | <a
+											th:if="${o.otStatus == T(com.ot.model.OvertimeStatus).REVISE} and ${o.currentNext == o.wf}"
+											th:href="@{reviseEdit/{id}(id=${o.id})}"> <i
+												class="fas fa-edit fa-fw"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div th:unless="${#lists.isEmpty(myPending)}">
+							<table class="table table-bordered text-dark-600 small"
+								id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th class="th">No</th>
+										<th class="th">Form ID</th>
+										<th class="th">Project ID</th>
+										<th class="th">Project Name</th>
+										<th class="th">Next Approver</th>
+										<th class="th">Status</th>
+										<th class="th"></th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="o : ${myPending}">
+										<td th:text="${oStat.index+1}"></td>
+										<td th:text="${o.formId}"></td>
+										<td th:text="${o.projects.projectId}"></td>
+										<td th:text="${o.projects.name}"></td>
+										<td th:text="${o.currentNext}"></td>
+										<td th:text="${o.otStatus}"></td>
+										<td><a data-toggle="modal"
+											th:attr="data-target=${'#pendingModal'+o.id}" data-row="${o}">
+												<i class="fas fa-list fa-fw"></i>
+
+										</a> | <a th:href="@{history/{id}(id=${o.id})}"
+											data-toggle="modal"
+											th:attr="data-object-id=''+${o.id}+'', data-object-name='/history?id='+${o.id}+'', data-target='#historyModal'">
+												<i class="fas fa-user-check fa-fw"></i>
+										</a> | <a
+											th:if="${o.otStatus == T(com.ot.model.OvertimeStatus).REVISE} and ${o.currentNext == o.wf}"
+											th:href="@{reviseEdit/{id}(id=${o.id})}"> <i
+												class="fas fa-edit fa-fw"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div th:unless="${#lists.isEmpty(myApprove)}">
+							<table class="table table-bordered text-dark-600 small"
+								id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th class="th">No</th>
+										<th class="th">Form ID</th>
+										<th class="th">Project ID</th>
+										<th class="th">Project Name</th>
+										<th class="th">Next Approver</th>
+										<th class="th">Status</th>
+										<th class="th"></th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="o : ${myApprove}">
+										<td th:text="${oStat.index+1}"></td>
+										<td th:text="${o.formId}"></td>
+										<td th:text="${o.projects.projectId}"></td>
+										<td th:text="${o.projects.name}"></td>
+										<td th:text="${o.currentNext}"></td>
+										<td th:text="${o.otStatus}"></td>
+										<td><a data-toggle="modal"
+											th:attr="data-target=${'#approveModal'+o.id}" data-row="${o}">
+												<i class="fas fa-list fa-fw"></i>
+
+										</a> | <a th:href="@{history/{id}(id=${o.id})}"
+											data-toggle="modal"
+											th:attr="data-object-id=''+${o.id}+'', data-object-name='/history?id='+${o.id}+'', data-target='#historyModal'">
+												<i class="fas fa-user-check fa-fw"></i>
+										</a> | <a
+											th:if="${o.otStatus == T(com.ot.model.OvertimeStatus).REVISE} and ${o.currentNext == o.wf}"
+											th:href="@{reviseEdit/{id}(id=${o.id})}"> <i
+												class="fas fa-edit fa-fw"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div th:unless="${#lists.isEmpty(myRevise)}">
+							<table class="table table-bordered text-dark-600 small"
+								id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th class="th">No</th>
+										<th class="th">Form ID</th>
+										<th class="th">Project ID</th>
+										<th class="th">Project Name</th>
+										<th class="th">Next Approver</th>
+										<th class="th">Status</th>
+										<th class="th"></th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="o : ${myRevise}">
+										<td th:text="${oStat.index+1}"></td>
+										<td th:text="${o.formId}"></td>
+										<td th:text="${o.projects.projectId}"></td>
+										<td th:text="${o.projects.name}"></td>
+										<td th:text="${o.currentNext}"></td>
+										<td th:text="${o.otStatus}"></td>
+										<td><a data-toggle="modal"
+											th:attr="data-target=${'#reviseModal'+o.id}" data-row="${o}">
+												<i class="fas fa-list fa-fw"></i>
+
+										</a> | <a th:href="@{history/{id}(id=${o.id})}"
+											data-toggle="modal"
+											th:attr="data-object-id=''+${o.id}+'', data-object-name='/history?id='+${o.id}+'', data-target='#historyModal'">
+												<i class="fas fa-user-check fa-fw"></i>
+										</a> | <a
+											th:if="${o.otStatus == T(com.ot.model.OvertimeStatus).REVISE} and ${o.currentNext == o.wf}"
+											th:href="@{reviseEdit/{id}(id=${o.id})}"> <i
+												class="fas fa-edit fa-fw"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						
+						<div th:unless="${#lists.isEmpty(myReject)}">
+							<table class="table table-bordered text-dark-600 small"
+								id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th class="th">No</th>
+										<th class="th">Form ID</th>
+										<th class="th">Project ID</th>
+										<th class="th">Project Name</th>
+										<th class="th">Next Approver</th>
+										<th class="th">Status</th>
+										<th class="th"></th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="o : ${myReject}">
+										<td th:text="${oStat.index+1}"></td>
+										<td th:text="${o.formId}"></td>
+										<td th:text="${o.projects.projectId}"></td>
+										<td th:text="${o.projects.name}"></td>
+										<td th:text="${o.currentNext}"></td>
+										<td th:text="${o.otStatus}"></td>
+										<td><a data-toggle="modal"
+											th:attr="data-target=${'#rejectModal'+o.id}" data-row="${o}">
+												<i class="fas fa-list fa-fw"></i>
+
+										</a> | <a th:href="@{history/{id}(id=${o.id})}"
+											data-toggle="modal"
+											th:attr="data-object-id=''+${o.id}+'', data-object-name='/history?id='+${o.id}+'', data-target='#historyModal'">
+												<i class="fas fa-user-check fa-fw"></i>
+										</a> | <a
+											th:if="${o.otStatus == T(com.ot.model.OvertimeStatus).REVISE} and ${o.currentNext == o.wf}"
+											th:href="@{reviseEdit/{id}(id=${o.id})}"> <i
+												class="fas fa-edit fa-fw"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End of Main Content -->
+
+		<!-- End of Page Wrapper -->
+
+		<!-- Scroll to Top Button-->
+		<a class="scroll-to-top rounded" href="#page-top"> <i
+			class="fas fa-angle-up"></i>
+		</a>
+
+		<!-- Detail Model -->
+		<div class="modal fade set-in-main-model" th:each="o : ${myotlist}"
+			th:attr="id=${'editModal' + o.id}" tabindex="-1"
+			aria-labelledby="detailModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="detailModalLabel">My
+							Overtime Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Start Date</th>
+													<th scope="col">End Date</th>
+													<th scope="col">Day</th>
+													<th scope="col">Start Hour</th>
+													<th scope="col">End Hour</th>
+													<th scope="col">Total Hour</th>
+													<th scope="col">Reason</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr th:each="detail : ${o.overtimeDetails}">
+													<td scope="row" th:text="${detailStat.index+1}">1</td>
+													<td th:text="${detail.startDate}"></td>
+													<td th:text="${detail.endDate}"></td>
+													<td th:text="${detail.dayType}"></td>
+													<td th:text="${detail.startTime}"></td>
+													<td th:text="${detail.endTime}"></td>
+													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.reason}"></td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Detail Model  -->
+		
+		
+		<!-- MyApprove  Model -->
+		<div class="modal fade set-in-main-model" th:each="o : ${myApprove}"
+			th:attr="id=${'approveModal' + o.id}" tabindex="-1"
+			aria-labelledby="approveModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="approveModalLabel">My
+							Overtime Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Start Date</th>
+													<th scope="col">End Date</th>
+													<th scope="col">Day</th>
+													<th scope="col">Start Hour</th>
+													<th scope="col">End Hour</th>
+													<th scope="col">Total Hour</th>
+													<th scope="col">Reason</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr th:each="detail : ${o.overtimeDetails}">
+													<td scope="row" th:text="${detailStat.index+1}">1</td>
+													<td th:text="${detail.startDate}"></td>
+													<td th:text="${detail.endDate}"></td>
+													<td th:text="${detail.dayType}"></td>
+													<td th:text="${detail.startTime}"></td>
+													<td th:text="${detail.endTime}"></td>
+													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.reason}"></td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Approve Model  -->
+		
+		
+		<!-- MyReject  Model -->
+		<div class="modal fade set-in-main-model" th:each="o : ${myReject}"
+			th:attr="id=${'rejectModal' + o.id}" tabindex="-1"
+			aria-labelledby="rejectModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="rejectModalLabel">My
+							Overtime Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Start Date</th>
+													<th scope="col">End Date</th>
+													<th scope="col">Day</th>
+													<th scope="col">Start Hour</th>
+													<th scope="col">End Hour</th>
+													<th scope="col">Total Hour</th>
+													<th scope="col">Reason</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr th:each="detail : ${o.overtimeDetails}">
+													<td scope="row" th:text="${detailStat.index+1}">1</td>
+													<td th:text="${detail.startDate}"></td>
+													<td th:text="${detail.endDate}"></td>
+													<td th:text="${detail.dayType}"></td>
+													<td th:text="${detail.startTime}"></td>
+													<td th:text="${detail.endTime}"></td>
+													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.reason}"></td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Reject Model  -->
+		
+		
+			
+		<!-- MyRevise  Model -->
+		<div class="modal fade set-in-main-model" th:each="o : ${myRevise}"
+			th:attr="id=${'reviseModal' + o.id}" tabindex="-1"
+			aria-labelledby="reviseModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="reviseModalLabel">My
+							Overtime Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Start Date</th>
+													<th scope="col">End Date</th>
+													<th scope="col">Day</th>
+													<th scope="col">Start Hour</th>
+													<th scope="col">End Hour</th>
+													<th scope="col">Total Hour</th>
+													<th scope="col">Reason</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr th:each="detail : ${o.overtimeDetails}">
+													<td scope="row" th:text="${detailStat.index+1}">1</td>
+													<td th:text="${detail.startDate}"></td>
+													<td th:text="${detail.endDate}"></td>
+													<td th:text="${detail.dayType}"></td>
+													<td th:text="${detail.startTime}"></td>
+													<td th:text="${detail.endTime}"></td>
+													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.reason}"></td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Revise Model  -->
+		
+			
+		<!-- MyPending  Model -->
+		<div class="modal fade set-in-main-model" th:each="o : ${myPending}"
+			th:attr="id=${'pendingModal' + o.id}" tabindex="-1"
+			aria-labelledby="pendingModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="pendingModalLabel">My
+							Overtime Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Start Date</th>
+													<th scope="col">End Date</th>
+													<th scope="col">Day</th>
+													<th scope="col">Start Hour</th>
+													<th scope="col">End Hour</th>
+													<th scope="col">Total Hour</th>
+													<th scope="col">Reason</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr th:each="detail : ${o.overtimeDetails}">
+													<td scope="row" th:text="${detailStat.index+1}">1</td>
+													<td th:text="${detail.startDate}"></td>
+													<td th:text="${detail.endDate}"></td>
+													<td th:text="${detail.dayType}"></td>
+													<td th:text="${detail.startTime}"></td>
+													<td th:text="${detail.endTime}"></td>
+													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.reason}"></td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Pending Model  -->
+		
+		
+		
+		
+		
+		
+		
+		
+
+		<!--History Model  -->
+
+		<div class="modal fade set-in-main-model" id=historyModal
+			tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg text-dark">
+				<div class="modal-content detail-in-modal">
+					<div class="modal-header text-center ">
+						<h5 class="modal-title w-100" id="historyModalLabel">My
+							Overtime Record</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+
+						<div class="container-fluid">
+
+							<div class="row mt-4">
+								<div class="col-md-12">
+									<div class="table-responsive my-3">
+
+										<table
+											class="table-borderless table table-striped model-table text-dark-600 small">
+											<thead class="text-dark">
+												<tr>
+													<th scope="col">No</th>
+													<th scope="col">Sender</th>
+													<th scope="col">Receiver</th>
+													<th scope="col">Created Date</th>
+													<th scope="col">Status</th>
+													<th scope="col">Remark</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="his : ${workflowhistory}">
+													<td scope="row" th:text="${hisStat.index+1}">1</td>
+													<td th:text="${his.sender}"></td>
+													<td th:text="${his.receiver}"></td>
+													<td th:text="${his.createdDate}"></td>
+													<td th:text="${his.overtimeStatus}"></td>
+													<td th:text="${his.remark}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--End History Model  -->
+
+
+
+
+
+	</main>
+
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+html,body {
+  font-family: 'Noto Sans', sans-serif;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+	font-family: "Koulen", cursive!important;
+  
+}
+
+.header-container {
+	/* margin: 2em 0; */
+	background-color: aliceblue;
+}
+
+.table-container {
+	width: 90%;
+	margin: 0 auto;
+}
+
+table.dataTable td,
+table.dataTable th {
+	font-size: 0.9em;
+}
+
+.lead {
+  font-size: small;
+  font-weight: 600;
+  padding: 1em 0.5em;
+}
+
+.form-group > label {
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+
+.boDy{
+  
+  padding: 10px 10px 20px 10px;
+  border: 1px solid #BFBFBF;
+  background-color: white;
+  box-shadow: 10px 10px 5px #aaaaaa;;
+}
+

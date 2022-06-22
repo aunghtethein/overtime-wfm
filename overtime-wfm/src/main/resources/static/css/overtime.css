@@ -1,0 +1,65 @@
+.jumbotron{
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 20px;
+    box-shadow: 20px;
+    background-color: white;
+    border-color: #cad9f3;
+    margin-top: 30px;
+  
+
+}
+
+.set{
+    margin-top: 40px;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+legend a{
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+}
+.set-in-btn-legend{
+    background-color: #93ABD3;
+    width: 130px;
+    color: black;
+    border-radius: 10px;
+}
+
+.btn:hover{
+    background-color: #CFD9FA;
+color:blue;
+}
+.set-in-table{
+   
+border-radius: 10px;
+font-size: 14;
+ 
+}
+.set-in-row{
+    border-bottom: 1px solid #CFD9FA;
+}
+
+.set-in-modal{
+    background-color: white;
+    border-radius: 20px;
+    border: 2px solid #CFD9FA;
+    font-size: 13px;
+}
+.set-in-btn{
+    background-color: #93ABD3;
+    width: 80px;
+    color: black;
+    border-radius: 10px;
+
+}
+thead {
+    background-color: #CFD9FA;
+}
+.textbox{
+    background: transparent;
+    border-radius: 10px;
+    border-color: gray;
+    
+}
+

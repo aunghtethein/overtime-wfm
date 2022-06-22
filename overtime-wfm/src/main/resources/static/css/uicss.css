@@ -1,0 +1,21 @@
+table,th,td{
+    border: 1px solid black;
+    vertical-align: middle;
+    text-align: center;
+    
+  }
+  
+  tr{
+  
+  width: 100px;
+  height:50px;
+  }
+  .apply{
+    border: 1px solid black;
+    width: 100%;
+    border-top: 0;
+  }
+  
+  p span {
+    display: block;
+  }

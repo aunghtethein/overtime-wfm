@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layouts/main :: layout(~{::main})}">
+
+<body>
+	<main role="main">
+		<div class="container-fluid">
+
+			<!-- Division-->
+
+			<div class="container jumbotron">
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-12">
+						<h3 class="d-flex justify-content-center mb-4">Project Setup</h3>
+
+						<form th:action="@{/project/add}" method="post"
+							th:object="${pjAdd}">
+
+							<div class="form-group row">
+								<div class="col-md-2"></div>
+								<label for="code" class="col-md-2">Project ID</label>
+								<div class="col-md-4">
+									<input type="text" th:field="*{projectId}" class="form-control"
+										name="code" id="code" placeholder="Enter Project ID"
+										th:readonly="${button == 1}">
+								</div>
+								<div class="col-md-4">
+									<span id="errormsg" th:text="${errorid}" th:if="${errorid}"
+										class="text-danger"></span>
+									<span id="errormsg" th:text="${error}" th:if="${error}"
+										class="text-danger"></span> 
+									<span
+										th:if="${#fields.hasErrors('projectId')}"
+										th:errors="*{projectId}" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-2"></div>
+								<label for="name" class="col-md-2">Project Name</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="name" id="name"
+										placeholder="Enter Project Name" th:field="*{name}">
+									<button type="submit" th:if="${button != 1}"
+										class="btn btn-primary btn-md btn-block mt-3 ml-1">Add</button>
+									<button type="submit" th:if="${button == 1}"
+										th:formaction="@{/project/update}"
+										class="btn btn-primary  mt-3 ml-1">Update</button>
+									<a type="button" th:if="${button == 1}" th:href="@{/project}"
+										class="btn btn-primary button mt-3 ml-1">Back</a>
+								</div>
+								<div class="col-md-4">
+									<span id="errormsg" th:text="${error}" th:if="${error}"
+										class="text-danger"></span> 
+									<span id="errormsg"
+										th:text="${errorname}" th:if="${errorname}" class="text-danger"></span>
+									<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+										class="text-danger"></span>
+								</div>
+								<input type="hidden" name="id" th:field="*{id}" />
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+
+			<div class=" shadow mb-4">
+				<div class="card-body">
+					<form name="listForm">
+						<div class="table-responsive text-center text-gray-600 small">
+							<table class="table table-bordered" id="dataTable" width="100%"
+								cellspacing="0">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>Project ID</th>
+										<th>Project Name</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="pjList : ${list}">
+										<td th:text="${pjListStat.index+1}"></td>
+										<td th:text="${pjList.projectId}"></td>
+										<td th:text="${pjList.name}"></td>
+										<td><a th:href="@{/project/update(id=${pjList.id})}">
+												<i class="fa-solid fa-pen-to-square"></i>
+										</a> | <a th:href="@{/project/delete(id=${pjList.id})}"> <i
+												class="fa-solid fa-trash"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<!-- /.container-fluid -->
+		<!-- End of Main Content -->
+	</main>
+
+</body>
+
+</html>

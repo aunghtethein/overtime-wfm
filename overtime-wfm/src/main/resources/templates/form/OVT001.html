@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html th:replace="~{layouts/main :: layout(~{::main})}"
+	xmlns:th="http://www.thymeaf.org">
+
+<body>
+	<main role="main">
+
+		<div class="container-fluid ">
+
+			<!-- Page Heading -->
+			<section class="col-md-12 ">
+
+
+				<div
+					class="form-container col-md-10 offset-md-1  mt-5 jumbotron my-5">
+
+					<!-- form start -->
+					<form action="#" class="center" th:action="@{/overtime/create}"
+						th:object="${overtime}" method="post">
+						<h2 class="mb-5 d-flex justify-content-center w-100">OverTime
+							Form</h2>
+
+						<!-- Staff Row -->
+						<div class="row">
+							<div class="form-group row col-md-6">
+								<label for="sname"
+									class="col-md-4 col-form-label pr-0 text-left">Staff ID</label>
+								<div class="col-md-7 mt-2">
+									<input type="text" class="form-control textbox" readonly
+										th:name="staffs" th:id="staffs" th:value="${session.staffId}">
+								</div>
+							</div>
+
+							<div class="form-group row col-md-6">
+								<label for="sname"
+									class="col-md-4 col-form-label pr-0 text-left">Staff
+									Name</label>
+								<div class="col-md-7 mt-2">
+									<input type="text" class="form-control textbox" readonly
+										th:name="staffs" th:id="staffs"
+										th:value="${session.staffName}">
+								</div>
+							</div>
+						</div>
+
+
+
+						<!-- Project Row -->
+						<div class="row">
+
+							<div class="form-group row col-md-6">
+								<label for="status"
+									class="col-md-4 col-form-label pr-0 text-left">Project
+									ID</label>
+								<div class="col-md-7">
+									<select name="projectId" id="projectId"
+										class="form-control textbox">
+										<option value="">select</option>
+										<option th:each="pj : ${projects}"
+											th:selected="${pj.projectId	== session.projectId}"
+											th:onclick="'window.location.href = \'' + @{/form/option/{id}(id=${pj.id})} + '\''"
+											th:text="${pj.projectId}" th:value="${pj.projectId}"></option>
+									</select>
+									
+								</div>
+
+
+							</div>
+
+							<div class="form-group row col-md-6">
+								<label for="status"
+									class="col-md-4 col-form-label pr-0 text-left">Project
+									Name</label>
+								<div class="col-md-7">
+									<input type="text" th:value="${session.projectName}"
+										name="name" id="name" readonly class="form-control textbox">
+								</div>
+							</div>
+						</div>
+						<!-- Approver Row and Status -->
+						<div class="row">
+
+
+							<div class="form-group row col-md-6 mb-5">
+								<label for="sname"
+									class="col-md-4 col-form-label pr-0 text-left">Next
+									Approver</label>
+								<div class="col-md-7">
+									<input type="text" th:value="${session.currentNext}" readonly
+										class="form-control textbox"> <input type="hidden"
+										th:value="${session.currentNextId}" readonly
+										name="currentNext" id="currentNext"> <input
+										type="hidden" th:value="${session.pmNext}"
+										class="form-control textbox"> <input type="hidden"
+										th:value="${session.pmNextId}" name="pmNext" id="pmNext">
+
+									<input type="hidden" th:value="${session.deptNext}"
+										class="form-control textbox"> <input type="hidden"
+										th:value="${session.deptNextId}" readonly name="deptNext"
+										id="deptNext"> <input type="hidden"
+										th:value="${session.divNext}" class="form-control textbox">
+									<input type="hidden" th:value="${session.divNextId}" readonly
+										name="divNext" id="divNext">
+										<input type="hidden" th:value="${session.hrId}" readonly
+										name="hrNext" id="hrNext">
+
+
+								</div>
+							</div>
+
+							<div class="form-group row col-md-6 mb-5">
+								<label for="status"
+									class="col-md-4 col-form-label pr-0 text-left">Status</label>
+								<div class="col-md-7 textBox">
+									<select class="form-control textbox" th:field="*{otStatus}">
+										<option th:value="${T(com.ot.model.OvertimeStatus).PLAN}">PLAN</option>
+										<option th:value="${T(com.ot.model.OvertimeStatus).ACTUAL}">ACTUAL</option>
+									</select>
+
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<span th:if="${error}" th:text="${error}" class="text-danger"></span><br>
+								<span th:if="${detailError}"
+									th:text="${detailError}" class="text-danger"></span>
+							</div>
+						</div>
+
+						<!-- fieldset -->
+						<fieldset class="form-group p-5 responsive-fieldset set">
+							<legend class="w-auto px-2">
+								<a th:href="@{/overtime/details}"
+									class="btn btn-primary btn-customized set-in-btn-legend"
+									data-toggle="modal" data-target="#exampleModal">Add Detail</a>
+							</legend>
+
+
+							<!-- Table -->
+
+							<div class="table-responsive table-hover set-in-table"
+								th:unless="${#lists.isEmpty(details)}">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>No</th>
+											<th>Day Type</th>
+											<th>Start Date</th>
+											<th>End Date</th>
+											<th>Total Hours</th>
+											<th>Reason</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="set-in-row" th:each="d : ${details}">
+											<td th:text="${dStat.index+1}"></td>
+											<td th:text="${d.dayType}"></td>
+											<td th:text="${d.startDate}"></td>
+											<td th:text="${d.endDate}"></td>
+											<td th:text="${d.otTotalHour}"></td>
+											<td th:text="${d.reason}"></td>
+
+											<td class="py-0 align-middle">
+												<div class="btn-group btn-group-sm">
+													<!-- <a th:href="@{/overtime/edit/{reason}(reason=${d.reason})}"
+														class="btn" data-toggle="modal" data-target="#updateModal">
+														<i class="fas fa-edit"></i>
+													</a> -->
+													<a data-toggle="modal"
+														th:attr="data-target=${'#updateModal'+d.reason}"
+														data-row="${d}"> <i class="fas fa-list fa-fw"></i>
+													</a> | <a th:href="@{/overtime/{reason}(reason=${d.reason})}"
+														class="btn "> <i class="fas fa-trash"></i></a>
+												</div>
+											</td>
+
+										</tr>
+
+									</tbody>
+								</table>
+							</div>
+
+						</fieldset>
+						<!-- Submit Button  -->
+						<span th:if="${errorMessage}" th:text="${errorMessage}" class="text-danger"></span>
+						<div class="form-group row text-right">
+							<div class="col">
+								<button type="submit"
+									class="btn btn-primary btn-customized set-in-btn">Apply</button>
+								<button type="submit"
+									class="btn btn-primary btn-customized set-in-btn">Cancel</button>
+							</div>
+							
+						</div>
+
+					</form>
+
+					<!-- modal -->
+					<form th:action="@{/overtime/details}" method="post"
+						th:object="${detailObj}">
+						<div class="modal fade mt-5 set-in-main-model" id="exampleModal"
+							tabindex="-1" aria-labelledby="exampleModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content text-dark set-in-modal">
+									<div class="modal-header">
+										<h4 class="modal-title d-flex justify-content-center w-100"
+											id="exampleModalLabel">OverTime Detail</h4>
+										<a type="submit" class="close" data-dismiss="modal"
+											aria-label="Close"> <span aria-hidden="true">&times;</span>
+										</a>
+									</div>
+									<div class="modal-body ">
+
+										<!-- Date Row -->
+										<div class="row">
+											<div class="col-md-6">
+
+												<div class="form-group row ml-3">
+													<label for="startDate" class="col-md-4">Start Date</label>
+													<div class="col-md-7">
+														<input type="date" id="startDate" th:field="*{startDate}"
+															class="form-control textbox" />
+													</div>
+													<div class="col-md-4 ml-3"></div>
+													<span th:if="${#fields.hasErrors('startDate')}"
+														th:errors="*{startDate}" class="text-danger"></span>
+												</div>
+											</div>
+											<div class="col md 6">
+												<div class="form-group row ml-2">
+													<label for="endDate" class="col-md-4">End Date</label>
+													<div class="col-md-7">
+														<input type="date" id="endDate" th:field="*{endDate}"
+															class="form-control textbox" />
+													</div>
+													<div class="col-md-4 ml-3"></div>
+													<span th:if="${#fields.hasErrors('endDate')}"
+														th:errors="*{endDate}" class="text-danger"></span>
+												</div>
+
+
+											</div>
+										</div>
+
+										<!--Time  row -->
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group row ml-3">
+													<label for="startTime" class="col-md-4">Start Time</label>
+													<div class="col-md-7">
+														<input type="time" id="startTime" th:field="*{startTime}"
+															class="form-control textbox" />
+													</div>
+													<div class="col-md-4 ml-3"></div>
+													<span th:if="${#fields.hasErrors('startTime')}"
+														th:errors="*{startTime}" class="text-danger"></span>
+												</div>
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group row ml-2">
+													<label for="endTime" class="col-md-4">End Time</label>
+													<div class="col-md-7">
+														<input type="time" id="endTime" th:field="*{endTime}"
+															class="form-control textbox" />
+													</div>
+													<div class="col-md-4 ml-3"></div>
+													<span th:if="${#fields.hasErrors('endTime')}"
+														th:errors="*{endTime}" class="text-danger"></span>
+												</div>
+											</div>
+										</div>
+										<!-- Day TYpe row -->
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group row ml-3">
+													<label for="endTime" class="col-md-4">Day Type</label>
+													<div class="col-md-7">
+														<select class="form-control textbox" th:field="*{dayType}">
+															<option
+																th:each="dt : ${T(com.ot.model.DayType).values()}"
+																th:value="${dt}"
+																th:selected="${dt == T(com.ot.model.DayType)}"
+																th:text="${dt}"></option>
+														</select>
+														<div class="col-md-4"></div>
+														<span th:if="${#fields.hasErrors('dayType')}"
+															th:errors="*{dayType}" class="text-danger"></span>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group row ml-3">
+													<label for="message-text" class="col-form-label col-md-4">Reason</label>
+													<textarea class="form-control col-md-7 textbox"
+														th:field="*{reason}" id="message-text" rows="4"></textarea>
+													<div class="col-md-4"></div>
+													<span th:if="${#fields.hasErrors('reason')}"
+														th:errors="*{reason}" class="text-danger"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="submit" class="btn btn-primary set-in-btn">Add</button>
+										<button type="button" class="btn btn-primary set-in-btn"
+											data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+
+				</div>
+				<!-- modal End -->
+
+				<!--Update modal -->
+				<!-- 		
+				<div class="modal fade" 
+					th:each="d : ${details}" th:attr="id=${'updateModal' + d.reason}"
+				 	tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content mc text-dark">
+							<div class="modal-header">
+								<h5 class="modal-title" id="updateModalLabel">Update Form
+									Detail</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body ">
+								<form th:action="@{/overtime/update/{reason}(reason=${d.reason})}"
+									method="post" th:object="${updateD}"
+									th:unless="${#lists.isEmpty(updateD)}">
+
+
+												day Type Row
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group row ml-3">
+												<label for="endTime" class="col-md-4">Day Type</label>
+												<div class="col-md-7">
+													<select class="form-control textbox" th:field="*{dayType}">
+														<option th:each="dt : ${T(com.ot.model.DayType).values()}"
+															th:value="${dt}"
+															th:selected="${dt == T(com.ot.model.DayType)}"
+															th:text="${dt}"></option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6"></div>
+									</div>
+											Date Row
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group row ml-3">
+												<label for="startDate" class="col-md-4">Start Date</label>
+												<div class="col-md-7">
+													<input type="date" id="startDate" th:field="*{startDate}"
+														class="form-control textbox" />
+												</div>
+											</div>
+										</div>
+										<div class="col md 6">
+											<div class="form-group row ml-2">
+												<label for="endDate" class="col-md-4">End Date</label>
+												<div class="col-md-7">
+													<input type="date" id="endDate" th:field="*{endDate}"
+														class="form-control textbox" />
+												</div>
+											</div>
+
+
+										</div>
+									</div>
+												time row
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group row ml-3">
+												<label for="startTime" class="col-md-4">Start Time</label>
+												<div class="col-md-7">
+													<input type="time" id="startTime" th:field="*{startTime}"
+														class="form-control textbox" />
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group row ml-2">
+												<label for="endTime" class="col-md-4">End Time</label>
+												<div class="col-md-7">
+													<input type="time" id="endTime" th:field="*{endTime}"
+														class="form-control textbox" />
+												</div>
+											</div>
+										</div>
+									</div>
+										hours row
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group row ml-3">
+
+												<label for="otTotalHour" class="col-md-4">OT Total
+													Hour</label>
+												<div class="col-md-7">
+													<input type="text" id="otTotalHour"
+														th:field="*{otTotalHour}" class="form-control textbox" />
+												</div>
+											</div>
+
+
+										</div>
+									</div>
+												reason row
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group row ml-3">
+												<label for="message-text" class="col-form-label col-md-4">Reason</label>
+												<textarea class="form-control col-md-7 textbox"
+													th:field="*{reason}" id="message-text" rows="4"></textarea>
+											</div>
+										</div>
+									</div>
+									
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary">Update</button>
+								<button type="button" class="btn btn-primary"
+									data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+ -->
+
+				<!--Update modal End -->
+
+
+			</section>
+
+			<!-- /.container-fluid -->
+
+
+		</div>
+	</main>
+
+</body>
+</html>

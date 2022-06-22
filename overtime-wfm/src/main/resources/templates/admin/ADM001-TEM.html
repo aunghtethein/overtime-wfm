@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layouts/main :: layout(~{::main})}">
+
+<body>
+	<main role="main">
+		<div class="container-fluid">
+
+			<!-- Division-->
+
+			<div class="container jumbotron">
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-12">
+						<h3 class="d-flex justify-content-center mb-4">Team Setup</h3>
+
+						<form th:action="@{/team/add}" method="post"
+							th:object="${teamAdd}">
+							
+							<div class="form-group row">
+								<div class="col md-1"></div>
+								<label for="name" class="col-md-2">Team Name</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="name" id="name"
+										placeholder="Enter Team Name" th:field="*{name}">
+										<!-- <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+											class="alert alert-warning"></div> -->
+									<button type="submit" th:if="${button == 0}"
+										class="btn btn-primary btn-md btn-block mt-3 ml-1">Add</button>
+									<button type="submit" th:if="${button != 0}" th:formaction="@{/team/add/(id=${button})}"
+										class="btn btn-primary  mt-3 ml-1">Update</button>
+									<a type="button" th:if="${button != 0}" th:href="@{/team}"
+										class="btn btn-primary button mt-3 ml-1">Back</a>
+								</div>
+								<input type="hidden" name="id" th:field="*{id}" />
+								<div class="col-md-4">
+										<span id="errormsg" th:text="${error}" th:if="${error}"
+											class="text-danger"></span>
+										<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+											class="text-danger"></span>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class=" shadow mb-4">
+			<div class="card-body">
+				<form name="listForm">
+					<div class="table-responsive text-center text-gray-600 small">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>No</th>
+									<th>Team Name</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="teamList : ${list}">
+									<td th:text="${teamListStat.index+1}"></td>
+									<td th:text="${teamList.name}"></td>
+									<td><a th:href="@{/team/update(id=${teamList.id})}"> <i
+											class="fa-solid fa-pen-to-square"></i>
+									</a> | <a th:href="@{/team/delete(id=${teamList.id})}"> <i
+											class="fa-solid fa-trash"></i>
+									</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>

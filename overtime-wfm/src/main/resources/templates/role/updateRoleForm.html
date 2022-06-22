@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html th:replace="~{layouts/main :: layout(~{::main})}"
+	xmlns:th="http://www.thymeleaf.org">
+<body>
+	<main role="main">
+		<div class="container mt-5">
+			<form th:action="@{/role/update/{id}(id=${roleupdate.id})}" method="post" th:object="${roleupdate}">
+
+				<div class="form-group row">
+					<label for="name" class="col-md-2">Name</label>
+					<div class="col-md-6">
+						<input type="text" id="name" th:field="*{name}"
+							class="form-control" />
+					</div>
+					<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+						class="text-danger"></div>
+				</div>
+
+				<div class="form-group row">
+					<label for="roles" class="col-md-2">Privileges</label>
+					<div class="col-md-6 text-left">
+						<th:block th:each="privileges : ${listPrivilege}">
+							<div>
+								<input type="checkbox" th:field="*{privileges}"
+									th:text="${privileges.name}" th:value="${privileges.id}" class="m-2" />
+							</div>
+						</th:block>
+					</div>
+				</div>
+
+				<input type="submit" value="Update" class="btn btn-primary mr-auto">
+
+			</form>
+		</div>
+	</main>
+</body>
+</html>

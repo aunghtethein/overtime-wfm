@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html th:replace="~{layouts/main :: layout(~{::main})}"
+	xmlns:th="http://www.thymeaf.org">
+
+<body>
+	<main role="main">
+		<div class="container">
+
+			<div class="container jumbotron">
+				<form class="pt-3" th:action="@{/overtime/create}" method="post"
+					th:object="${overtime}">
+					<div class="form-row ml-2">
+						<div class="form-group row col-md-6">
+							<label for="sname" class="col-md-4 col-form-label pr-0 text-left">Staff
+								ID</label>
+							<div class="col-md-7 mt-2">
+								<input type="text" class="form-control" th:name="staffs" th:id="staffs" th:value="${session.staffId}">
+							</div>
+						</div>
+
+						<div class="form-group row col-md-6">
+							<label for="sname" class="col-md-4 col-form-label pr-0 text-left">Staff
+								Name</label>
+							<div class="col-md-7 mt-2">
+								<input type="text" class="form-control"  th:name="staffs" th:id="staffs" th:value="${session.staffName}">
+							</div>
+						</div>
+						<div class="form-group row col-md-6">
+							<label for="status"
+								class="col-md-4 col-form-label pr-0 text-left">Project
+								ID</label>
+							<div class="col-md-7">
+								<select name="projectId" id="projectId" class="form-control">
+									<option th:each="pj : ${projects}"
+										th:onclick="'window.location.href = \'' + @{/form/option/{id}(id=${pj.id})} + '\''"
+										th:text="${pj.projectId}" th:value="${pj.projectId}"></option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row col-md-6">
+							<label for="status"
+								class="col-md-4 col-form-label pr-0 text-left">Project
+								Name</label>
+							<div class="col-md-7">
+								<select name="projectName" id="projectName" class="form-control">
+									<option th:each="pj : ${projects}"
+										th:onclick="'window.location.href = \'' + @{/form/option/{id}(id=${pj.id})} + '\''"
+										th:text="${pj.name}" th:value="${pj.id}"></option>
+								</select>
+							</div>
+						</div>
+
+
+						<div class="form-group row col-md-6 mb-5">
+							<label for="sname" class="col-md-4 col-form-label pr-0 text-left">Next
+								Approver</label>
+							<div class="col-md-7">
+								<input type="text" th:value="${session.next}" th:name="nextApprover" th:id="nextApprover"
+									class="form-control textBox">
+							</div>
+						</div>
+
+						<div class="form-group row col-md-6 mb-5">
+							<label for="status"
+								class="col-md-4 col-form-label pr-0 text-left">Status</label>
+							<div class="col-md-7 textBox">
+								<select class="form-control" th:field="*{otStatus}">
+									<option th:each="otStatus : ${T(com.ot.model.Status).values()}"
+										th:value="${otStatus}"
+										th:selected="${otStatus == T(com.ot.model.Status)}"
+										th:text="${otStatus}"></option>
+								</select>
+							</div>
+						</div> 
+						<a th:href="@{/overtime/details}" class="btn btn-outline-primary">Add Overtime Detail </a>
+							<!-- Table -->
+							<div class="table-responsive"
+								th:unless="${#lists.isEmpty(details)}">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>No</th>
+											<th>Day Type</th>
+											<th>Start Date</th>
+											<th>End Date</th>
+											<th>Start Time</th>
+											<th>End Time</th>
+											<th>OT Range</th>
+											<th>Total Hours</th>
+											<th>Reason</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="d : ${details}">
+											<td th:text="${dStat.index+1}"></td>
+											<td th:text="${d.dayType}"></td>
+											<td th:text="${d.startDate}"></td>
+											<td th:text="${d.endDate}"></td>
+											<td th:text="${d.startTime}"></td>
+											<td th:text="${d.endTime}"></td>
+											<td th:text="${d.otRange}"></td>
+											<td th:text="${d.otTotalHour}"></td>
+											<td th:text="${d.reason}"></td>
+
+											<td class="py-0 align-middle">
+												<div class="btn-group btn-group-sm">
+													<a href="#" class="btn" data-toggle="modal" data-target="#update" data-whatever="@mdo">
+														<i class="fas fa-edit"></i>
+													</a>|
+													<a th:href="@{/overtime/{reason}(reason=${d.reason})}" class="btn ">
+														<i class="fas fa-trash"></i>
+													</a>
+												</div>
+											</td>
+
+										</tr>
+									</tbody>
+
+
+
+								</table>
+						</div>
+					</div>
+					  <button class="btn btn-outline-danger mt-5" type="submit">Apply</button>
+        				
+				</form>
+
+			</div>
+
+			
+
+
+
+
+		</div>
+	</main>
+</body>
+</html>
