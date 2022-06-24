@@ -7,7 +7,9 @@ public class WorkflowDto {
 	private int id;
 	private String initial_requester;
 	private String sender;
+	private String senderName;
 	private String receiver;
+	private String receiverName;
 	private LocalDate createdDate;
 	private String remark;
 	private OvertimeStatus otStatus;
@@ -57,6 +59,22 @@ public class WorkflowDto {
 	}
 
 	
+	public String getSenderName() {
+		return senderName;
+	}
+
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+
+	public String getReceiverName() {
+		return receiverName;
+	}
+
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+
 	public String getRemark() {
 		return remark;
 	}

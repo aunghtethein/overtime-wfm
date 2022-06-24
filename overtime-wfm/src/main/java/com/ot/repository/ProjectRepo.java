@@ -27,5 +27,6 @@ public interface ProjectRepo extends JpaRepository<Project, Integer> {
 	@Query(value="(SELECT * FROM project ORDER BY ID DESC LIMIT 10)\r\n"
 			+ "ORDER BY ID ASC;",nativeQuery = true)
 	List<Project> tenProject();
-	 
+	
+		 
 }

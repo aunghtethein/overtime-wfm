@@ -47,7 +47,24 @@ public class StaffController {
 		model.addAttribute("posiList", posService.findAll());
 		model.addAttribute("list", staffService.findAll());
 		model.addAttribute("staffAdd", new StaffBean());
+		System.out.println(staffService.findAll().get(0).getName());
 		return "admin/ADM001-STF";
+	}
+	@GetMapping("/getstaff")
+	public String getStaff(Model model) {
+		
+		List<Staff> staff=staffService.findAll();
+		for(Staff s:staff) {
+			System.out.println("id:::::"+s.getId());
+			System.out.println("name:::::"+s.getName());
+			System.out.println("projects:::::"+s.getProjects());
+			System.out.println("positions:::::"+s.getPositions());
+			System.out.println("teams:::::"+s.getTeams());
+			
+		}
+		//model.addAttribute("staffList", staffService.findAll());
+		
+		return "getstaff";
 	}
 
 	@PostMapping("/adminStaff/add")

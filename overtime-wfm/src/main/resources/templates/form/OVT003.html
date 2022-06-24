@@ -8,56 +8,11 @@
 
 	<main role="main">
 
-		<!-- Begin Page Content -->
 		<div class="container-fluid">
-
-			<!-- Page Heading -->
-			<!-- Page Heading -->
-			<!--<h1 class="h3 mb-2 text-gray-800 d-flex justify-content-center my-5">My
-				Overtime Record</h1> -->
-
-
 			<!-- DataTales Example -->
 			<div class=" shadow mb-4 ot-data">
 				<div class="card-header py-3 cardh">
-					<!-- Search From
-						<form th:action="@{}" 
-							class="form-inline col-md-offset-2 justify-content-between">
-							<div class="col-xl-3 mb-2">
-								<div class="from-group float-right">
-									<input type="text" class="form-control" id="date"
-										placeholder="From Date" th:field="${}"
-										onfocus="(this.type = 'date')">
-								</div>
-							</div>
-							<div class="col-xl-2 mb-2">
-								<div class="from-group float-right">
-									<input type="text" class="form-control" id="date"
-										placeholder="To Date" th:field="${}"
-										onfocus="(this.type = 'date')">
-								</div>
-							</div>
-							<div class="col-xl-2 mb-2">
-								<div class="from-group float-right">
-									<input type="text" class="form-control" id="search-all"
-										th:field="${}" placeholder="Project Name">
-								</div>
-							</div>
-							<div class="col-xl-2 mb-2">
-								<div class="from-group float-right">
-									<input type="text" class="form-control" id="search-all"
-										th:field="${}" placeholder="Staff Name">
-								</div>
-							</div>
-							<div class="col-xl-1 mb-2">
-								<div class="from-group float-right">
-									<input type="submit" class="btn btn-primary search-button"
-										value="Search" th:field="${}">
-								</div>
-							</div>
-						</form>
-						
-						 -->
+		
 				</div>
 
 				<div class="card-body">
@@ -71,7 +26,6 @@
 										<th class="th">Form ID</th>
 										<th class="th">Project ID</th>
 										<th class="th">Project Name</th>
-										<th class="th">Next Approver</th>
 										<th class="th">Status</th>
 										<th class="th"></th>
 
@@ -83,7 +37,6 @@
 										<td th:text="${o.formId}"></td>
 										<td th:text="${o.projects.projectId}"></td>
 										<td th:text="${o.projects.name}"></td>
-										<td th:text="${o.currentNext}"></td>
 										<td th:text="${o.otStatus}"></td>
 										<td><a data-toggle="modal"
 											th:attr="data-target=${'#editModal'+o.id}" data-row="${o}">

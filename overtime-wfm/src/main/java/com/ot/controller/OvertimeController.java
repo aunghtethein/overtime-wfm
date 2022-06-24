@@ -54,10 +54,9 @@ public class OvertimeController {
 	private OverTimeRepo otRepo;
 	@Autowired
 	private WorkFlowHistoryRepo workFlowHistoryRepo;
+	@Autowired
+	private OverTimeDetailsRepo detailRepo;
 	
-	
-	
-
 	List<OvertimeDetails> list = new ArrayList<>();
 
 	@GetMapping("/overtime")
@@ -123,8 +122,9 @@ public class OvertimeController {
 			//end hhz
 		} else {
 			overtime.setProjects(pj);
+			String str = "DAT";
+			overtime.setFormId(str);
 			overtime.setOvertimeDetails(list);
-			overtime.setFormId("default");
 			overtime.setSubmitted_date(LocalDate.now());
 			overtime.setOtStatus(OvertimeStatus.PENDING);
 			overtime.setWf(staff.getStaffId());
@@ -132,7 +132,10 @@ public class OvertimeController {
 
 			Workflow wf = new Workflow();
 			wf.setSender(staff.getStaffId());
+			wf.setSenderName(staff.getName());
 			wf.setReceiver(overtime.getCurrentNext());
+			Staff currentNext=staffRepo.findByStaffId(overtime.getCurrentNext());
+			wf.setReceiverName(currentNext.getName());
 			wf.setCreatedDate(LocalDate.now());
 			wf.setOtStatus(OvertimeStatus.PENDING);
 			wf.setOvertime(overtime);
@@ -163,6 +166,7 @@ public class OvertimeController {
 		return "form/OVT003";
 	}
 	
+	//Dashboard Approve Card 1
 	@GetMapping("/myApproveOt")
 	public String myApproveOt(Model model) {
 		Staff staff = au.getAuthenticatedUser();
@@ -197,24 +201,53 @@ public class OvertimeController {
 	
 	@GetMapping("/history/{id}")
 	public String history(@PathVariable("id") int id, Model model) {
-		System.out.println("D Id" + id);
 		List<WorkflowHistory> wkhList=workFlowHistoryRepo.findWorkflowHistorybyOvertimeId(id);
-		System.out.println("Ta Ku Ku "+wkhList);
 		model.addAttribute("workflowhistory",wkhList);
 		return "form/update";
 	}
-	
-	
-	
+
+	List<OvertimeDetails> odList = new ArrayList<>();
 	@GetMapping("/reviseEdit/{id}")
 	public String reviseEdit(@PathVariable Integer id, Model model) {
 		Overtime overtime=otRepo.findById(id).orElse(null);
 		model.addAttribute("reviseUpdate",overtime);
-		for(OvertimeDetails d : overtime.getOvertimeDetails()) {
-			model.addAttribute("reviseUpdateDetail", d);		
+		
+		
+		for(OvertimeDetails de : odList) {
+			OvertimeDetails d = detailRepo.findById(de.getId()).orElse(null);
+			d.setStartDate(de.getStartDate());
+			d.setEndDate(de.getEndDate());
+			d.setStartTime(de.getStartTime());
+			d.setEndTime(de.getEndTime());
+			d.setReason(de.getReason());
+			d.setOtRange(de.getOtRange());
+			d.setDayType(de.getDayType());
+			d.setOtTotalHour(de.getOtTotalHour());
+			detailRepo.save(d);
 		}
+		System.out.println(odList);
+		if(odList.size() == 0) {
+			for(OvertimeDetails d : overtime.getOvertimeDetails()) {
+				model.addAttribute("reviseUpdateDetail", d);		
+			}
+		}else {
+			for(OvertimeDetails d : odList) {
+				model.addAttribute("reviseUpdateDetail", d);
+			}
+		}
+		
+		
 		return "form/OVT002";
 	}
+	
+	@PostMapping("/reviseDetailSave")
+	public String reviseDetailSave(Overtime overtime) {
+		
+		otRepo.save(overtime);
+		
+		return "redirect:/myRecord";
+	}
+	
 	@PostMapping ("/reviseDetailUpdateSave/{id}")
 	public String reviseDetailUpdateSave(@PathVariable Integer id,OvertimeDetails details,BindingResult result,Model  model) {
 		
@@ -252,7 +285,11 @@ public class OvertimeController {
 			details.setOtRange(Math.round(totalhour * range)); 
 		}
 		
-		return "redirect:/reviseEdit";
+		odList.add(details);
+		//todo
+		Overtime o =otRepo.findByDetailId(id);
+		int i = o.getId();
+		return String.format("redirect:/reviseEdit/%s", i);
 	}
 
 	// overtime detail get mapping
@@ -381,10 +418,7 @@ public class OvertimeController {
 
 			session.setAttribute("projectName", pj.getName());
 			session.setAttribute("projectId", pj.getProjectId());
-			
-			
 		}
-
 		session.setAttribute("hrNext", hr);
 		session.setAttribute("hrId",hr.getStaffId());
 		

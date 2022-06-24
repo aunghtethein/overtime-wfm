@@ -22,5 +22,6 @@ public interface WorkFlowHistoryRepo extends JpaRepository<WorkflowHistory, Inte
 	@Query("select wh from WorkflowHistory wh where wh.overtimeStatus = 4 and wh.sender = :id ")
 	List<WorkflowHistory> findWorkflowByReject(String id);
 
-
+	@Query("select wh from WorkflowHistory wh join wh.overtime o where o.id = :id ")
+	List<WorkflowHistory> findPmWfhByOvertimeId(int id);
 }

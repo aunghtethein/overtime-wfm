@@ -34,6 +34,8 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 	private ProjectService projectService;
 	@Autowired
 	private PositionService positionService;
+	@Autowired
+	private TeamService teamService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(OvertimeWfmApplication.class, args);
@@ -47,6 +49,8 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		Privilege wh = new Privilege("wh");
 		Privilege masterData = new Privilege("masterData");
 		Privilege report = new Privilege("report");
+		Privilege hrreport = new Privilege("hrReport");
+		Privilege approverreport = new Privilege("approverReport");
 		Privilege dsh001 = new Privilege("dsh001");
 		Privilege dsh002 = new Privilege("dsh002");
 		Privilege dsh003 = new Privilege("dsh003");
@@ -60,6 +64,8 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		privilegeService.save(dsh001);
 		privilegeService.save(dsh002);
 		privilegeService.save(dsh003);
+		privilegeService.save(hrreport);
+		privilegeService.save(approverreport);
 
 		Position position1 = new Position(1, "Programmer");
 		Position position2 = new Position(2, "SEL");
@@ -79,27 +85,27 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 
 		Role staffRole = new Role();
 		staffRole.setName("StaffRole");
-		staffRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, dsh003)));
+		staffRole.setPrivileges(new HashSet<>(Arrays.asList(overtime,report, dsh003)));
 		roleService.save(staffRole);
 
 		Role pmRole = new Role();
 		pmRole.setName("PMRole");
-		pmRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, report, dsh002)));
+		pmRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, approverreport, dsh002)));
 		roleService.save(pmRole);
 
 		Role deptRole = new Role();
 		deptRole.setName("DeptRole");
-		deptRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, report, dsh002)));
+		deptRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, approverreport, dsh002)));
 		roleService.save(deptRole);
 
 		Role divRole = new Role();
 		divRole.setName("DivRole");
-		divRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, report, dsh002)));
+		divRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, approverreport, dsh002)));
 		roleService.save(divRole);
 
 		Role hrRole = new Role();
 		hrRole.setName("HRRole");
-		hrRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, report, wh)));
+		hrRole.setPrivileges(new HashSet<>(Arrays.asList(overtime, manageOt, hrreport, wh,dsh003)));
 		roleService.save(hrRole);
 
 		Role adminRole = new Role();
@@ -116,19 +122,30 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		projectService.save(pj2);
 		projectService.save(pj3);
 		projectService.save(pj4);
+		
+		
+		Team team1 = new Team(1, "Aeon");
+		Team team2 = new Team(2, "System");
+		teamService.save(team1);
+		teamService.save(team2);
 
+		
 		Staff staff1 = new Staff(1, "25-11111", "may su", 200000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff1.setRoles(Set.of(staffRole));
 		staff1.setProjects(Arrays.asList(pj1, pj2));
 		staff1.setPositions(position1);
+		staff1.setTeams(Arrays.asList(team1,team2));
 		staffService.save(staff1);
-
+		
+		
+		
 		Staff staff2 = new Staff(2, "25-22222", "Su Su", 300000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff2.setRoles(Set.of(pmRole));
 		staff2.setProjects(Arrays.asList(pj1));
 		staff2.setPositions(position4);
+		staff2.setTeams(Arrays.asList(team1));
 		staffService.save(staff2);
 
 		Staff staff3 = new Staff(3, "25-44444", "Kyaw Kyaw", 300000,
@@ -136,6 +153,7 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff3.setRoles(Set.of(deptRole));
 		staff3.setProjects(Arrays.asList(pj1));
 		staff3.setPositions(position6);
+		staff3.setTeams(Arrays.asList(team1));
 		staffService.save(staff3);
 
 		Staff staff4 = new Staff(4, "25-66666", "Hla Hla", 200000,
@@ -150,6 +168,7 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff5.setRoles(Set.of(pmRole));
 		staff5.setProjects(Arrays.asList(pj2));
 		staff5.setPositions(position4);
+		staff5.setTeams(Arrays.asList(team2));
 		staffService.save(staff5);
 
 		Staff staff6 = new Staff(6, "25-33333", "Kyi Kyi", 300000,
@@ -157,14 +176,15 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff6.setRoles(Set.of(deptRole));
 		staff6.setProjects(Arrays.asList(pj2));
 		staff6.setPositions(position6);
+		staff6.setTeams(Arrays.asList(team2));
 		staffService.save(staff6);
 
 		Staff staff7 = new Staff(7, "25-55555", "Wana", 300000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff7.setRoles(Set.of(divRole));
-
 		staff7.setProjects(Arrays.asList(pj2));
 		staff7.setPositions(position7);
+		staff7.setTeams(Arrays.asList(team2));
 		staffService.save(staff7);
 
 		Staff staff8 = new Staff(8, "25-88888", "Ku Gi", 200000,
@@ -178,12 +198,18 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff9.setRoles(Set.of(staffRole));
 		staff9.setProjects(Arrays.asList(pj2));
 		staff9.setPositions(position1);
+		staff9.setTeams(Arrays.asList(team2));
 		staffService.save(staff9);
 
 		Staff staff10 = new Staff(10, "25-00000", "admin", 200000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff10.setRoles(Set.of(adminRole));
+		staff10.setProjects(Arrays.asList(pj2));
+		staff10.setPositions(position1);
+		staff10.setTeams(Arrays.asList(team2));
 		staffService.save(staff10);
+		
+		
 
 	}
 

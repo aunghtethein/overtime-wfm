@@ -103,17 +103,29 @@
 
       <!-- Nav Item - Report -->
       <li class="nav-item"
-        sec:authorize="isAuthenticated() and hasAuthority('wh')" ><a class="nav-link" href="fileupload.html">
+        sec:authorize="isAuthenticated() and hasAuthority('wh')" ><a class="nav-link text-white" href="fileupload.html">
           <i class="fa-solid fa-clock"></i> <span>Working Hours</span>
       </a></li>
 
 	  <li class="nav-item"
-        sec:authorize="isAuthenticated() and hasAuthority('masterData')" ><a class="nav-link" th:href="@{/fileupload}">
+        sec:authorize="isAuthenticated() and hasAuthority('masterData')" ><a class="nav-link text-white" th:href="@{/fileupload}">
           <i class="fa-solid fa-clock"></i> <span>File Upload</span>
       </a></li>
 
       <!-- Nav Item - Report -->
-      <li class="nav-item"><a class="nav-link" th:href="@{/report}">
+      <li class="nav-item"
+      		sec:authorize="isAuthenticated() and hasAuthority('report')"
+      		><a class="nav-link text-white" th:href="@{/staff/report}">
+          <i class="fas fa-fw fa-chart-area"></i> <span>Report</span>
+      </a></li>
+      
+      <li class="nav-item"
+      	sec:authorize="isAuthenticated() and hasAuthority('approverReport')"><a class="nav-link text-white" th:href="@{/approver/report}">
+          <i class="fas fa-fw fa-chart-area"></i> <span>Report</span>
+      </a></li>
+      
+      <li class="nav-item"
+      	sec:authorize="isAuthenticated() and hasAuthority('hrReport')"><a class="nav-link text-white" th:href="@{/hr/report}">
           <i class="fas fa-fw fa-chart-area"></i> <span>Report</span>
       </a></li>
 
@@ -121,7 +133,7 @@
       <li class="nav-item">
         <div sec:authorize="isAuthenticated()">
           <a href="javascript: document.logoutForm.submit()"
-            class="mr-2 text-secondary nav-link"> <i
+            class="mr-2 text-white nav-link"> <i
             class="fas fa-sign-out-alt"></i> Logout
           </a>
 

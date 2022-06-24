@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -25,7 +26,7 @@ public class Overtime {
 	private String formId;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Column(name = "SUBMITTED_DATE")
-	private LocalDate submitted_date;
+	private LocalDate submittedDate;
 	@Column(name = "OT_STATUS")
 	private OvertimeStatus otStatus;
 	@Column(name = "CURRENT_NEXT_APPROVER")
@@ -81,13 +82,13 @@ public class Overtime {
 
 
 	public LocalDate getSubmitted_date() {
-		return submitted_date;
+		return submittedDate;
 	}
 
 
 
 	public void setSubmitted_date(LocalDate submitted_date) {
-		this.submitted_date = submitted_date;
+		this.submittedDate = submitted_date;
 	}
 
 
@@ -215,7 +216,7 @@ public class Overtime {
 
 	@Override
 	public String toString() {
-		return "Overtime [id=" + id + ", formId=" + formId + ", submitted_date=" + submitted_date + ", otStatus="
+		return "Overtime [id=" + id + ", formId=" + formId + ", submitted_date=" + submittedDate + ", otStatus="
 				+ otStatus.toString() + ", currentNext=" + currentNext + ", pmNext=" + pmNext + ", deptNext=" + deptNext
 				+ ", divNext=" + divNext + ", hrNext=" + hrNext + ", staffs=" + staffs + ", projects=" + projects
 				+ ", overtimeDetails=" + overtimeDetails + "]";

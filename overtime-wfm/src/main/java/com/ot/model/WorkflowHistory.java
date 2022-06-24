@@ -15,7 +15,9 @@ public class WorkflowHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String sender;
+	private String senderName;
 	private String receiver;
+	private String receiverName;
 	private LocalDate createdDate;
 	private OvertimeStatus overtimeStatus;
 	private String remark;
@@ -72,6 +74,25 @@ public class WorkflowHistory {
 	}
 	public void setOvertime(Overtime overtime) {
 		this.overtime = overtime;
+	}
+	
+	public String getSenderName() {
+		return senderName;
+	}
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+	public String getReceiverName() {
+		return receiverName;
+	}
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+	@Override
+	public String toString() {
+		return "WorkflowHistory [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", createdDate="
+				+ createdDate + ", overtimeStatus=" + overtimeStatus + ", remark=" + remark + ", workflowId="
+				+ workflowId + ", overtime=" + overtime + "]";
 	}
 	
 	

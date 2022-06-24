@@ -16,6 +16,7 @@ import com.ot.model.Workflow;
 import com.ot.model.WorkflowDto;
 import com.ot.model.WorkflowHistory;
 import com.ot.repository.OverTimeRepo;
+import com.ot.repository.StaffRepo;
 import com.ot.repository.WorkFlowHistoryRepo;
 import com.ot.repository.WorkFlowRepo;
 import com.ot.service.OvertimeService;
@@ -38,6 +39,8 @@ public class WorkflowController {
 	private WorkFlowRepo workflowRepo;
 	@Autowired
 	private WorkFlowHistoryRepo whRepo;
+	@Autowired
+	private StaffRepo staffRepo;
 
 	@GetMapping("/pending")
 	public String pending(Model model) throws InterruptedException {
@@ -47,7 +50,6 @@ public class WorkflowController {
 		for (Workflow wf : pendingWfList) {
 			pendingOtList.add(wf.getOvertime());
 		}
-
 		model.addAttribute("workflow", new WorkflowDto());
 		model.addAttribute("pendingOtList", pendingOtList);
 
@@ -66,37 +68,53 @@ public class WorkflowController {
 		if (dto.getOtStatus().equals(OvertimeStatus.APPROVE)) {
 			if (p.getName().equals("Project Manager")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getDeptNext());
+				Staff s = staffRepo.findByStaffId(ot.getDeptNext());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.PENDING);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getDeptNext());
+				h.setReceiverName(s.getName());
 				h.setOvertimeStatus(OvertimeStatus.APPROVE);
 				
 			} else if (p.getName().equals("Dept Head")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getDivNext());
+				Staff s = staffRepo.findByStaffId(ot.getDivNext());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.PENDING);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getDivNext());
+				h.setReceiverName(s.getName());
 				h.setOvertimeStatus(OvertimeStatus.APPROVE);
 				
 			} else if(p.getName().equals("Division Head")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getHrNext());
+				Staff s = staffRepo.findByStaffId(ot.getHrNext());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.PENDING);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getHrNext());
+				h.setReceiverName(s.getName());
 				h.setOvertimeStatus(OvertimeStatus.APPROVE);
 				
 
 			}else {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getStaffs().getStaffId());
+				Staff s = staffRepo.findByStaffId(ot.getStaffs().getStaffId());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.ACCEPT);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getStaffs().getStaffId());
+				h.setReceiverName(s.getName());
 				h.setOvertimeStatus(OvertimeStatus.ACCEPT);
-				ot.setOtStatus(OvertimeStatus.ACCEPT);
+				ot.setOtStatus(OvertimeStatus.APPROVE);
 				
 			}
 			
@@ -107,6 +125,7 @@ public class WorkflowController {
 			
 			h.setCreatedDate(LocalDate.now());
 			h.setSender(staff.getStaffId());
+			h.setSenderName(staff.getName());
 			h.setRemark(dto.getRemark());
 			h.setWorkflowId(dto.getId());
 			h.setOvertime(ot);
@@ -131,29 +150,44 @@ public class WorkflowController {
 
 			if (p.getName().equals("Project Manager")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getStaffs().getStaffId());
+				Staff s = staffRepo.findByStaffId(ot.getStaffs().getStaffId());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getStaffs().getStaffId());
+				h.setReceiverName(s.getName());
 			} else if (p.getName().equals("Dept Head")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getPmNext());
+				Staff s = staffRepo.findByStaffId(ot.getPmNext());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getPmNext());
+				h.setReceiverName(s.getName());
 			} else if(p.getName().equals("Division Head")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getDeptNext());
+				Staff s = staffRepo.findByStaffId(ot.getDeptNext());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getDeptNext());
+				h.setReceiverName(s.getName());
 			}else {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getDivNext());
+				Staff s = staffRepo.findByStaffId(ot.getDivNext());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getDivNext());
-				
+				h.setReceiverName(s.getName());
 			}
 			
 			ot.setWf(staff.getStaffId());
@@ -162,6 +196,7 @@ public class WorkflowController {
 			
 			h.setCreatedDate(LocalDate.now());
 			h.setSender(staff.getStaffId());
+			h.setSenderName(staff.getName());
 			h.setRemark(dto.getRemark());
 			h.setOvertimeStatus(OvertimeStatus.REVISE);
 			h.setWorkflowId(dto.getId());
@@ -187,22 +222,34 @@ public class WorkflowController {
 			}
 			if (p.getName().equals("Project Manager")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getStaffs().getStaffId());
+				Staff s = staffRepo.findByStaffId(ot.getStaffs().getStaffId());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REJECT);
 				dto.setCreatedDate(LocalDate.now());
 			} else if (p.getName().equals("Dept Head")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getStaffs().getStaffId());
+				Staff s = staffRepo.findByStaffId(ot.getStaffs().getStaffId());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REJECT);
 				dto.setCreatedDate(LocalDate.now());
 			} else  if(p.getName().equals("Division Head")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getStaffs().getStaffId());
+				Staff s = staffRepo.findByStaffId(ot.getStaffs().getStaffId());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REJECT);
 				dto.setCreatedDate(LocalDate.now());
 			}else {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getStaffs().getStaffId());
+				Staff s = staffRepo.findByStaffId(ot.getStaffs().getStaffId());
+				dto.setReceiverName(s.getName());
 				dto.setOtStatus(OvertimeStatus.REJECT);
 				dto.setCreatedDate(LocalDate.now());
 			}
@@ -212,8 +259,10 @@ public class WorkflowController {
 			overtimeService.save(ot);
 			
 			h.setReceiver(ot.getStaffs().getStaffId());
+			h.setReceiverName(ot.getStaffs().getName());
 			h.setCreatedDate(LocalDate.now());
 			h.setSender(staff.getStaffId());
+			h.setSenderName(staff.getName());
 			h.setRemark(dto.getRemark());
 			h.setOvertimeStatus(OvertimeStatus.REJECT);
 			h.setWorkflowId(dto.getId());
@@ -226,7 +275,9 @@ public class WorkflowController {
 		Workflow wf = workflowRepo.findWorkflowByOvertimeId(dto.getOtId());
 
 		wf.setSender(dto.getSender());
+		wf.setSenderName(dto.getSenderName());
 		wf.setReceiver(dto.getReceiver());
+		wf.setReceiverName(dto.getReceiverName());
 		wf.setCreatedDate(dto.getCreatedDate());
 		wf.setOtStatus(dto.getOtStatus());
 		wf.setRemark(dto.getRemark());
@@ -264,33 +315,49 @@ public class WorkflowController {
 			WorkflowHistory h = new WorkflowHistory();
 			if (p.getName().equals("Project Manager")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getStaffs().getStaffId());
+				Staff receiver = staffRepo.findByStaffId(ot.getStaffs().getStaffId());
+				dto.setReceiverName(receiver.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getStaffs().getStaffId());
-
+				h.setReceiverName(receiver.getName());
 			} else if (p.getName().equals("Dept Head")) {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getPmNext());
+				Staff receiver = staffRepo.findByStaffId(ot.getPmNext());
+				dto.setReceiverName(receiver.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getPmNext());
+				h.setReceiverName(receiver.getName());
 			} else if(p.getName().equals("Division Head")){
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getDeptNext());
+				Staff receiver = staffRepo.findByStaffId(ot.getDeptNext());
+				dto.setReceiverName(receiver.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getDeptNext());
+				h.setReceiverName(receiver.getName());
 			}else {
 				dto.setSender(staff.getStaffId());
+				dto.setSenderName(staff.getName());
 				dto.setReceiver(ot.getDivNext());
+				Staff receiver = staffRepo.findByStaffId(ot.getDeptNext());
+				dto.setReceiverName(receiver.getName());
 				dto.setOtStatus(OvertimeStatus.REVISE);
 				dto.setCreatedDate(LocalDate.now());
 				h.setReceiver(ot.getDivNext());
+				h.setReceiverName(receiver.getName());
 			}
 
 			h.setCreatedDate(LocalDate.now());
 			h.setSender(staff.getStaffId());
+			h.setSenderName(staff.getName());
 			h.setRemark(dto.getRemark());
 			h.setOvertimeStatus(OvertimeStatus.REVISE);
 			h.setWorkflowId(dto.getId());
@@ -307,7 +374,9 @@ public class WorkflowController {
 		Workflow wf = workflowRepo.findWorkflowByOvertimeId(dto.getOtId());
 
 		wf.setSender(dto.getSender());
+		wf.setSender(dto.getSenderName());
 		wf.setReceiver(dto.getReceiver());
+		wf.setReceiverName(dto.getReceiverName());
 		wf.setCreatedDate(dto.getCreatedDate());
 		wf.setOtStatus(dto.getOtStatus());
 		wf.setRemark(dto.getRemark());
@@ -330,6 +399,7 @@ public class WorkflowController {
 		return "form/REQ003-03";
 
 	}
+	
 	@GetMapping("/approve")
 	public String approve(Model model) {
 		Staff staff = au.getAuthenticatedUser();

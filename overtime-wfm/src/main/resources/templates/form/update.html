@@ -17,9 +17,8 @@
 											<thead class="text-dark">
 												<tr>
 													<th scope="col">No</th>
-													<th scope="col">Sender</th>
-													<th scope="col">Receiver</th>
-													<th scope="col">Created Date</th>
+													<th scope="col">Committer</th>
+													<th scope="col">Issued Date</th>
 													<th scope="col">Status</th>
 													<th scope="col">Remark</th>
 												</tr>
@@ -28,8 +27,7 @@
 											<tbody>
 												<tr th:each="his : ${workflowhistory}">
 													<td scope="row" th:text="${hisStat.index+1}">1</td>
-													<td th:text="${his.sender}"></td>
-													<td th:text="${his.receiver}"></td>
+													<td th:text="${his.senderName}"></td>
 													<td th:text="${his.createdDate}"></td>
 													<td th:text="${his.overtimeStatus}"></td>
 													<td th:text="${his.remark}"></td>

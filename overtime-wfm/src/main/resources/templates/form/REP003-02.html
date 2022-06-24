@@ -13,19 +13,16 @@
 			<!-- Page Heading -->
 			<h1 class="h3 mb-2 text-gray-800 d-flex justify-content-center my-5">Report</h1>
 
-			<div class="row mt-3 mx-5">
-
-				<div class="card-body my-5">
-					<div class="" id="graph"
-						style="width: 550px; height: 400px; margin: 0 auto"></div>
+				<div class="row justify-content-center mt-3">
+		
+					<div class="my-5">
+						<div class="" id="graph"
+							style="width: 550px; height: 400px; margin: 0 auto"></div>
+					</div>
 				</div>
-			</div>
-				
 				<!-- DataTales Example -->
 				<div class=" row shadow mb-4 mt-5 ot-data">
-					<div class="card-header py-3 cardh">
-					<h1></h1>
-					</div>
+					<div class="card-header py-3 cardh"></div>
 
 					<div class="card-body">
 						<div class="table-responsive">
@@ -52,8 +49,7 @@
 											<td th:text="${o.projects.name}"></td>
 											<td th:text="${o.staffs.id}"></td>
 											<td th:text="${o.staffs.name}"></td>
-											<td><a th:href="@{/staff/print/{id}(id=${o.id})}"><i
-													class="fa-solid fa-print"></i></a></td>
+											<td><a th:href="@{/approver/print/{id}(id=${o.id})}"><i class="fa-solid fa-print"></i></a></td>
 										</tr>
 									</tbody>
 								</table>
@@ -62,17 +58,18 @@
 					</div>
 				</div>
 			</div>
-		
-		<!-- End of Main Content -->
+			
+			<!-- End of Main Content -->
 
+			<!-- End of Page Wrapper -->
 
-		<script
-			src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script
-			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="https://code.highcharts.com/highcharts.js"></script>
-		<script src="https://code.highcharts.com/modules/exporting.js"></script>
-		<script type="text/javascript" th:inline="javascript">
+			<script
+				src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+			<script
+				src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+			<script src="https://code.highcharts.com/highcharts.js"></script>
+			<script src="https://code.highcharts.com/modules/exporting.js"></script>
+			<script type="text/javascript" th:inline="javascript">
 			$(function() {
 				Highcharts
 						.chart(
@@ -125,6 +122,7 @@
 			});
 		</script>
 	</main>
+
 </body>
 
 </html>

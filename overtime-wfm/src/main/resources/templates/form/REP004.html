@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html th:fragment="layout(content)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/uicss.css}">
+</head>
+<body>
+   <div class="container">
+       
+        <div class="row mt-5">
+            
+            <p>
+                <span>Overtime Request Form</span>
+                <span>Project  ID: xxxxxxxxxx</span>
+                <hr>
+                <span class="align-items-end">Form No:</span>
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" colspan="1" style="vertical-align: top;" >
+                            Sr. No
+                        </th>
+                        <th rowspan="2" colspan="1" style="vertical-align: top;">
+                            Task
+                        </th>
+                        <th rowspan="2" colspan="1" style="vertical-align: top;">
+                            Assigned To 
+                            (With Staff ID)
+                        </th>
+                        <th rowspan="1" colspan="6">
+                            Planned Date and Time
+                        </th>
+                        <th rowspan="1" colspan="6">
+                            Actual Date and Time
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="vertical-align: top;" colspan="2">Date</th>
+                        <th>Start Hour</th>
+                        <th>Finshed Hour</th>
+                        <th>Toal Hour</th>
+                        <th>Day Type</th>
+        
+                       	<th style="vertical-align: top;" colspan="2">Date</th>
+                        <th>Start Hour</th>
+                        <th>Finshed Hour</th>
+                        <th>Toal Hour</th>
+                        <th style="vertical-align: top;">Range</th>
+                    </tr>
+                </thead>
+                <tbody class="h-100">
+                    
+                    <tr th:each="o : ${overtime.overtimeDetails}" >
+                        <td th:text="${oStat.index+1}"></td>
+                        <td th:text="${o.reason}"></td>
+                        <td th:text="${session.staffName}"></td>
+                        <td th:text="${o.startDate}"></td>
+                        <td th:text="${o.endDate}"></td>
+                        <td th:text="${o.startTime}"></td>
+                        <td th:text="${o.endTime}"></td>
+                        <td th:text="${o.otTotalHour}"></td>
+                        <td th:text="${o.dayType}"></td>
+                        
+                        <td th:text="${o.startDate}"></td>
+                       	<td th:text="${o.endDate}"></td>
+                        <td th:text="${o.startTime}"></td>
+                        <td th:text="${o.endTime}"></td>
+                        <td th:text="${o.otTotalHour}"></td>
+                         <td th:text="${o.otRange}"></td>
+                    </tr>
+                    
+                </tbody>
+                
+            </table>
+         
+      
+        <div class="row apply ml-0 ">
+            <div class="col-lg-3" th:each="o : ${overtime}" >
+				<div th:each="d : ${o.overtimeDetails}" >
+					<p>REQUESTED By</p>
+	                <label>Name: </label> <label th:text="${session.staffName}"></label>
+	                <br>
+	                <label>Date: </label> <label th:text="${o.submitted_date}"></label>
+	                <br>
+	                <label>Signature: </label> <label th:text="${o.staffs.signature}"></label>
+	                <br>
+	                <label>Remark: </label> <label th:text="${d.reason}"></label>
+	                <br>
+	                <label>Status: </label> <label th:text="${o.otStatus}"></label>
+				
+				</div>
+            </div>
+            
+            <div class="col-lg-3" th:if="${#lists.isEmpty(overtime)}">
+				<p>REQUESTED By</p>
+                <label>Name:.......... </label> 
+                <br>
+                <label>Date:.......... </label> 
+                <br>
+                <label>Signature:.......... </label> 
+                <br>
+                <label>Remark:.......... </label> 
+                <br>
+                <label>Status:.......... </label> 
+		    </div>
+            
+            <div class="col-lg-3" th:each="w : ${pmwf}">
+                <p>APPROVAL</p>
+                <label>Project Manager: </label> <label th:text="${session.pmName}"></label>
+                <br>
+                <label>Date: </label> <label th:text="${w.createdDate}"></label>
+                <br>
+                <label>Signature: </label> 
+                <br>
+                <label>Remark: </label> <label th:text="${w.remark}"></label>
+                <br>
+                <label>Status: </label> <label th:text="${w.overtimeStatus}"></label>
+			
+            </div>
+            <div class="col-lg-3" th:if="${#lists.isEmpty(pmwf)}">
+				<p>APPROVAL</p>
+                <label>Project Manager.......... </label> 
+                <br>
+                <label>Date:.......... </label> 
+                <br>
+                <label>Signature:.......... </label> 
+                <br>
+                <label>Remark:.......... </label> 
+                <br>
+                <label>Status:.......... </label> 
+		    </div>
+            <div class="col-lg-3" th:each="w : ${deptwf}">
+                <p>APPROVAL</p>
+                <label>Department Head: </label> <label th:text="${session.deptName}"></label>
+                <br>
+                <label>Date: </label> <label th:text="${w.createdDate}"></label>
+                <br>
+                <label>Signature: </label> <label>Signature</label>
+                <br>
+                <label>Remark: </label> <label th:text="${w.remark}"></label>
+                <br>
+                <label>Status: </label> <label th:text="${w.overtimeStatus}"></label>
+			
+            </div>
+             <div class="col-lg-3" th:if="${#lists.isEmpty(deptwf)}">
+				<p>APPROVAL</p>
+                <label>Department Head:.......... </label> 
+                <br>
+                <label>Date:.......... </label> 
+                <br>
+                <label>Signature:.......... </label> 
+                <br>
+                <label>Remark:.......... </label> 
+                <br>
+                <label>Status:.......... </label> 
+		    </div>
+            <div class="col-lg-3" th:each="w : ${divwf}">
+                <p>Approval</p>
+                <label>Name: </label> <label th:text="${session.divName}"></label>
+                <br>
+                <label>Date: </label> <label th:text="${w.createdDate}"></label>
+                <br>
+                <label>Signature: </label> <label>Signature</label>
+                <br>
+                <label>Remark: </label> <label th:text="${w.remark}"></label>
+                <br>
+                <label>Status: </label> <label th:text="${w.overtimeStatus}"></label>
+			
+            </div>
+            <div class="col-lg-3" th:if="${#lists.isEmpty(divwf)}">
+				<p>APPROVAL</p>
+                <label>Division Head:.......... </label> 
+                <br>
+                <label>Date:.......... </label> 
+                <br>
+                <label>Signature:.......... </label> 
+                <br>
+                <label>Remark:.......... </label> 
+                <br>
+                <label>Status:.......... </label> 
+		    </div>
+        </div>
+        <div class="row apply ml-0 mb-5 ">
+        	<div class="d-flex justify-content-center col-md-12">
+        	<h4>– OFFICE USE ONLY –</h4>
+            </div>
+        	<div class="col-lg-4">
+                <p>HR Services</p>
+                <label>Recorded Date:................. </label>
+                <br>
+                <label>Signature:..................... </label>
+                	
+            </div>
+            <div class="col-lg-4">
+                <p>Finance</p>
+                <label>Cash Payment Date:................. </label>
+                <br>
+                <label>Signature:..................... </label>
+                	
+            </div>
+            <div class="col-lg-4">
+                <p>Cash Received</p>
+                <label>Received Date:................. </label>
+                <br>
+                <label>Signature:..................... </label>
+                	
+            </div>
+          </div>
+      	 <a href="#" th:href="@{/export/{id}(id=${session.oid})}" class="btn btn-success mb-5  mr-2">Print</a>
+       <div th:unless="${#lists.isEmpty(session.hrPrint)}">
+      	 <a href="#" th:href="@{/hr/report}" class="btn btn-success mb-5">Back</a>
+       </div>
+		
+       <div th:unless="${#lists.isEmpty(session.approverPrint)}">
+      	 <a href="#" th:href="@{/approver/report}" class="btn btn-success mb-5">Back</a>
+       </div>
+       <div th:unless="${#lists.isEmpty(session.staffPrint)}">
+      	 <a href="#" th:href="@{/staff/report}" class="btn btn-success mb-5">Back</a>
+       </div>
+           
+    </div>
+   </div>  
+</body>
+</html>

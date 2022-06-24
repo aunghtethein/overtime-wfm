@@ -1,5 +1,6 @@
 package com.ot.service.implementation;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,14 @@ public class OvertimeServiceImpl implements OvertimeService {
 	@Override
 	public Overtime findById(Integer id) {
 		return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("INVALID ID" + id));
+	}
+
+	@Override
+	public List<Overtime> listAll(LocalDate startDate, LocalDate endDate) {
+		if(startDate != null && endDate != null) {
+			return repo.findBySubmittedDateBetween(startDate, endDate);
+		}
+		return repo.findAll();
 	}
 
 }

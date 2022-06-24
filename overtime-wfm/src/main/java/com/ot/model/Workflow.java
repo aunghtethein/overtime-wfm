@@ -17,8 +17,12 @@ public class Workflow {
 	private int id;
 	@Column(name="SENDER")
 	private String sender;
+	@Column(name="SENDERNAME")
+	private String senderName;
 	@Column(name="RECEIVER")
 	private String receiver;
+	@Column(name="RECEIVER_NAME")
+	private String receiverName;
 	@Column(name="CREATED_DATE")
 	private LocalDate createdDate;
 	@Column(name="OT_STATUS")
@@ -69,9 +73,18 @@ public class Workflow {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
-	
-	
+	public String getSenderName() {
+		return senderName;
+	}
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+	public String getReceiverName() {
+		return receiverName;
+	}
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
 	public Overtime getOvertime() {
 		return overtime;
 	}

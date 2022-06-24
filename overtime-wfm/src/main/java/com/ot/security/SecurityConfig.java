@@ -21,6 +21,7 @@ public class SecurityConfig {
                 .usernameParameter("staffId")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
+                .failureForwardUrl("/error")
                 .permitAll()
         ).logout(logout -> logout
                 // configure logout

@@ -22,12 +22,11 @@ public class UploadFileController {
 	
 	@GetMapping("/fileupload")
     public String index(Model model) {
-		model.addAttribute("teamStructure", new TeamStructure());
-        return "admin/FLU001";
+	    return "admin/FLU001";
     }
 		
 	@PostMapping("/file")
-	public String uploadMultipartFile(@RequestParam("uploadfile")MultipartFile file,TeamStructure teamStructure,Model model) {
+	public String uploadMultipartFile(@RequestParam("uploadfile")MultipartFile file,Model model) {
 		try {
 			
 			service.store(file);

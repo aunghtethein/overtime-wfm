@@ -42,7 +42,7 @@ public class Staff implements Serializable{
 	@JoinTable( name="STAFF_ROLE")
 	private Set<Role> roles ;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "STAFF_TEAM")
 	private List<Team> teams;
 	
