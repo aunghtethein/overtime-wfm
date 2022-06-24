@@ -56,6 +56,8 @@ public class OvertimeController {
 	private WorkFlowHistoryRepo workFlowHistoryRepo;
 	@Autowired
 	private OverTimeDetailsRepo detailRepo;
+	@Autowired
+	private WorkFlowRepo workFlowRepo;
 	
 	List<OvertimeDetails> list = new ArrayList<>();
 
@@ -212,7 +214,6 @@ public class OvertimeController {
 		Overtime overtime=otRepo.findById(id).orElse(null);
 		model.addAttribute("reviseUpdate",overtime);
 		
-		
 		for(OvertimeDetails de : odList) {
 			OvertimeDetails d = detailRepo.findById(de.getId()).orElse(null);
 			d.setStartDate(de.getStartDate());
@@ -225,7 +226,6 @@ public class OvertimeController {
 			d.setOtTotalHour(de.getOtTotalHour());
 			detailRepo.save(d);
 		}
-		System.out.println(odList);
 		if(odList.size() == 0) {
 			for(OvertimeDetails d : overtime.getOvertimeDetails()) {
 				model.addAttribute("reviseUpdateDetail", d);		
@@ -241,9 +241,27 @@ public class OvertimeController {
 	}
 	
 	@PostMapping("/reviseDetailSave")
-	public String reviseDetailSave(Overtime overtime) {
+	public String reviseDetailSave(Overtime overtime,Model model) {
+		Staff staff = au.getAuthenticatedUser();
 		
-		otRepo.save(overtime);
+		Overtime o = otRepo.findById(overtime.getId());
+		o.setOtStatus(OvertimeStatus.PENDING);
+		System.out.println(o);
+		otRepo.save(o);
+	
+		
+		
+		Workflow wf = workFlowRepo.findWorkflowByOvertimeId(o.getId());
+		
+		wf.setSender(staff.getStaffId());
+		wf.setSenderName(staff.getName());
+		wf.setReceiver(o.getCurrentNext());
+		Staff currentNext=staffRepo.findByStaffId(o.getCurrentNext());
+		wf.setReceiverName(currentNext.getName());
+		wf.setCreatedDate(LocalDate.now());
+		wf.setOtStatus(OvertimeStatus.PENDING);
+		wf.setOvertime(o);
+		workflowService.save(wf);
 		
 		return "redirect:/myRecord";
 	}
