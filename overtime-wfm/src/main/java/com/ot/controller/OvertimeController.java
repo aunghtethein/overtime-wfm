@@ -1,14 +1,11 @@
 package com.ot.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
@@ -136,52 +133,24 @@ public class OvertimeController {
 			overtime.setWf(staff.getStaffId());
 
 			// actual working hour list for overtime staff
-		/*
-			List<WH> whStaffId = new ArrayList<WH>();
+			List<WH> whStaffList = new ArrayList<WH>();
 			for (OvertimeDetails d : overtime.getOvertimeDetails()) {
 				Date startDate = DateConverter.convertStartDateToUtilDate(d.getStartDate());
 				Date endDate = DateConverter.convertEndDateToUtilDate(d.getEndDate());
 
 				List<WH> whList = workingHourRepo.findByDateBetween(startDate, endDate);
 				System.out.println("whlist::::::::" + whList);
-				for (WH wh : whList) {
-					if (wh.getStaffId().equals(overtime.getStaffs().getStaffId())) {
-						whStaffId.add(wh);
-						double acutalHour = whStaffId.stream().mapToDouble(a -> a.getActualHour()).sum();
-						d.setActualWh(acutalHour);
-
-					}
-					
-				}
-				*/
-			
-			List<WH> whStaffId = new ArrayList<WH>();
-			List<Double> ho=new ArrayList<>();
-			List<OvertimeDetails> details=new ArrayList<>();
-			for (OvertimeDetails d : details) {
-				Date startDate = DateConverter.convertStartDateToUtilDate(d.getStartDate());
-				Date endDate = DateConverter.convertEndDateToUtilDate(d.getEndDate());
-
-				List<WH> whList = workingHourRepo.findByDateBetween(startDate, endDate);
-				
-			
-				System.out.println("whlist::::::::" + whList);
 				
 				for (WH wh : whList) {
-					
 					if (wh.getStaffId().equals(overtime.getStaffs().getStaffId())) {
-						
-						whStaffId.add(wh);
+						whStaffList.add(wh);
 					}
-				}
-				double acutalHour = whStaffId.stream().mapToDouble(a -> a.getActualHour()).sum();
-				ho.add(acutalHour);
-				
+				}	
+				System.out.println("whStaffId::::::::" + whStaffList);
+				double acutalHour = whStaffList.stream().mapToDouble(a -> a.getActualHour()).sum();
 				d.setActualWh(acutalHour);	
+				whStaffList.removeAll(whStaffList);
 			}
-			Double r = ho.stream().reduce(0.0, Double::sum);
-			
-			details.add(null);
 
 			overtimeService.save(overtime);
 

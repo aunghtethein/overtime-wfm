@@ -88,6 +88,7 @@ public class DashboardController {
 
 		List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
 		System.out.println("pjlist " + pjList);
+		
 		List<String> pjNameList = new ArrayList<>();
 		List<Double> otList = new ArrayList<>();
 

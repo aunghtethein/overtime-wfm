@@ -21,6 +21,5 @@ public interface WkhRepo extends JpaRepository<WH, Integer>{
 	List<WH> findWHByStaffId(String staffId);
 	
 	List<WH> findByDateBetween(Date startDate, Date endDate);
-
 	
 }
