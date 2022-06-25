@@ -1,6 +1,5 @@
 package com.ot.controller;
 
-import com.ot.model.TeamStructure;
 import com.ot.service.implementation.FileService;
 import com.ot.service.implementation.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;

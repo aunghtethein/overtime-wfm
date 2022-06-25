@@ -21,7 +21,6 @@ import com.ot.repository.StaffRepo;
 import com.ot.repository.WorkFlowHistoryRepo;
 import com.ot.repository.WorkFlowRepo;
 import com.ot.util.AuthenticatedUser;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,8 +40,6 @@ public class ReportController {
 
 	@Autowired
 	private AuthenticatedUser au;
-	@Autowired
-	private WorkFlowRepo workflowRepo;
 	@Autowired
 	private WorkFlowHistoryRepo whRepo;
 	@Autowired
