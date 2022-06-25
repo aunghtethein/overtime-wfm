@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html th:replace="~{layouts/main :: layout(~{::main})}"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	xmlns:th="http://www.thymeaf.org">
 
 
@@ -45,10 +46,14 @@
 										th:attr="data-target=${'#editModal'+p.id}" data-row="${p}">
 											<i class="fas fa-list fa-fw"></i>
 									</a></td>
+									
 								</tr>
 							</tbody>
 						</table>
+						
 					</div>
+					
+					
 				</div>
 			</div>
 
@@ -91,9 +96,9 @@
 													<th scope="col">Start Date</th>
 													<th scope="col">End Date</th>
 													<th scope="col">Day</th>
-													<th scope="col">Start Hour</th>
-													<th scope="col">End Hour</th>
 													<th scope="col">Total Hour</th>
+													<th scope="col" sec:authorize="isAuthenticated() and hasAuthority('wh')">Actual Working Hour</th>
+													
 													<th scope="col">Reason</th>
 												</tr>
 											</thead>
@@ -104,9 +109,8 @@
 													<td th:text="${detail.startDate}"></td>
 													<td th:text="${detail.endDate}"></td>
 													<td th:text="${detail.dayType}"></td>
-													<td th:text="${detail.startTime}"></td>
-													<td th:text="${detail.endTime}"></td>
 													<td th:text="${detail.otTotalHour}"></td>
+													<td th:text="${detail.actualWh}" sec:authorize="isAuthenticated() and hasAuthority('wh')"></td>
 													<td th:text="${detail.reason}"></td>
 												</tr>
 											</tbody>
@@ -141,14 +145,7 @@
 									</div>
 
 
-									<div class="form-group row col-md-6">
-										<label for="sname"
-											class="col-md-6 col-form-label pr-0 text-left">Next
-											Approver</label>
-										<div class="col-md-6 mt-2">
-											<input type="text" class="form-control textbox">
-										</div>
-									</div>
+									
 
 								</div>
 
