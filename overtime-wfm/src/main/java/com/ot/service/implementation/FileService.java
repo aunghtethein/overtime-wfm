@@ -74,6 +74,7 @@ public class FileService {
 					}
 					
 					staff.setName(ts.getName());
+					staff.setPassword("$2a$12$jCqvdUtagrxYUB.2ibEiMOYozMxJIgY8XupmqgL/0Ub6O3X86zKYe");
 					staff.setStaffId(ts.getStaffId());
 					staffRepo.save(staff);
 					

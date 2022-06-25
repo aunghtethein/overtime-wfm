@@ -1,9 +1,14 @@
 package com.ot.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
@@ -22,17 +27,20 @@ import com.ot.model.OvertimeDetails;
 import com.ot.model.OvertimeStatus;
 import com.ot.model.Project;
 import com.ot.model.Staff;
+import com.ot.model.WH;
 import com.ot.model.Workflow;
 import com.ot.model.WorkflowHistory;
 import com.ot.repository.OverTimeDetailsRepo;
 import com.ot.repository.OverTimeRepo;
 import com.ot.repository.ProjectRepo;
 import com.ot.repository.StaffRepo;
+import com.ot.repository.WkhRepo;
 import com.ot.repository.WorkFlowHistoryRepo;
 import com.ot.repository.WorkFlowRepo;
 import com.ot.service.OvertimeService;
 import com.ot.service.WorkflowService;
 import com.ot.util.AuthenticatedUser;
+import com.ot.util.DateConverter;
 
 @Controller
 public class OvertimeController {
@@ -55,7 +63,9 @@ public class OvertimeController {
 	private OverTimeDetailsRepo overtimeDetailRepo;
 	@Autowired
 	private WorkFlowRepo workFlowRepo;
-	
+	@Autowired
+	private WkhRepo workingHourRepo;
+
 	List<OvertimeDetails> list = new ArrayList<>();
 
 	@GetMapping("/overtime")
@@ -75,7 +85,7 @@ public class OvertimeController {
 
 	@PostMapping("/overtime/create")
 	public String saveOvertime(@Valid @ModelAttribute("overtime") Overtime overtime, BindingResult result, Model model,
-			HttpSession session) {
+			HttpSession session) throws ParseException {
 		Staff staff = au.getAuthenticatedUser();
 		model.addAttribute("overtime", overtime);
 		model.addAttribute("detailObj", new OvertimeDetails());
@@ -85,20 +95,19 @@ public class OvertimeController {
 		session.setAttribute("staffId", staff.getStaffId());
 		session.setAttribute("staffName", staff.getName());
 		Project pj = (Project) session.getAttribute("project");
-		
-		
-		if (pj == null && list.size()==0) {
+
+		if (pj == null && list.size() == 0) {
 			model.addAttribute("detailError", "Overtime Details is required!!");
 			model.addAttribute("error", "Project ID is required!!");
 			return "form/OVT001";
-		}else if(pj == null && list.size()!=0) {
+		} else if (pj == null && list.size() != 0) {
 			model.addAttribute("error", "Project ID is required!!");
 			return "form/OVT001";
-		}else if(pj != null && list.size()==0) {
+		} else if (pj != null && list.size() == 0) {
 			model.addAttribute("detailError", "Overtime Details is required!!");
 			return "form/OVT001";
 		}
-		
+
 		overtime.setStaffs(staff);
 
 		boolean od = list.stream().allMatch(a -> a.getOtTotalHour() <= 3);
@@ -115,8 +124,8 @@ public class OvertimeController {
 			session.setAttribute("staffName", staff.getName());
 
 			return "form/OVT001";
-			
-			//end hhz
+
+			// end hhz
 		} else {
 			overtime.setProjects(pj);
 			String str = "DAT";
@@ -125,13 +134,62 @@ public class OvertimeController {
 			overtime.setSubmitted_date(LocalDate.now());
 			overtime.setOtStatus(OvertimeStatus.PENDING);
 			overtime.setWf(staff.getStaffId());
+
+			// actual working hour list for overtime staff
+		/*
+			List<WH> whStaffId = new ArrayList<WH>();
+			for (OvertimeDetails d : overtime.getOvertimeDetails()) {
+				Date startDate = DateConverter.convertStartDateToUtilDate(d.getStartDate());
+				Date endDate = DateConverter.convertEndDateToUtilDate(d.getEndDate());
+
+				List<WH> whList = workingHourRepo.findByDateBetween(startDate, endDate);
+				System.out.println("whlist::::::::" + whList);
+				for (WH wh : whList) {
+					if (wh.getStaffId().equals(overtime.getStaffs().getStaffId())) {
+						whStaffId.add(wh);
+						double acutalHour = whStaffId.stream().mapToDouble(a -> a.getActualHour()).sum();
+						d.setActualWh(acutalHour);
+
+					}
+					
+				}
+				*/
+			
+			List<WH> whStaffId = new ArrayList<WH>();
+			List<Double> ho=new ArrayList<>();
+			List<OvertimeDetails> details=new ArrayList<>();
+			for (OvertimeDetails d : details) {
+				Date startDate = DateConverter.convertStartDateToUtilDate(d.getStartDate());
+				Date endDate = DateConverter.convertEndDateToUtilDate(d.getEndDate());
+
+				List<WH> whList = workingHourRepo.findByDateBetween(startDate, endDate);
+				
+			
+				System.out.println("whlist::::::::" + whList);
+				
+				for (WH wh : whList) {
+					
+					if (wh.getStaffId().equals(overtime.getStaffs().getStaffId())) {
+						
+						whStaffId.add(wh);
+					}
+				}
+				double acutalHour = whStaffId.stream().mapToDouble(a -> a.getActualHour()).sum();
+				ho.add(acutalHour);
+				
+				d.setActualWh(acutalHour);	
+			}
+			Double r = ho.stream().reduce(0.0, Double::sum);
+			
+			details.add(null);
+
 			overtimeService.save(overtime);
 
 			Workflow wf = new Workflow();
 			wf.setSender(staff.getStaffId());
 			wf.setSenderName(staff.getName());
 			wf.setReceiver(overtime.getCurrentNext());
-			Staff currentNext=staffRepo.findByStaffId(overtime.getCurrentNext());
+			Staff currentNext = staffRepo.findByStaffId(overtime.getCurrentNext());
 			wf.setReceiverName(currentNext.getName());
 			wf.setCreatedDate(LocalDate.now());
 			wf.setOtStatus(OvertimeStatus.PENDING);
@@ -152,64 +210,63 @@ public class OvertimeController {
 		model.addAttribute("myotlist", list);
 		return "form/OVT003";
 	}
-	
+
 	@GetMapping("/myPendingOt")
 	public String myPendingOt(Model model) {
 		Staff staff = au.getAuthenticatedUser();
-	
-		List<Overtime> myPendingList=overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
+
+		List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myPending", myPendingList);
-	
+
 		return "form/OVT003";
 	}
-	
-	//Dashboard Approve Card 1
+
+	// Dashboard Approve Card 1
 	@GetMapping("/myApproveOt")
 	public String myApproveOt(Model model) {
 		Staff staff = au.getAuthenticatedUser();
-		
-		List<Overtime> myApproveList=overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
+
+		List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myApprove", myApproveList);
-		
+
 		return "form/OVT003";
 	}
-	
+
 	@GetMapping("/myRejectOt")
 	public String myRejectOt(Model model) {
 		Staff staff = au.getAuthenticatedUser();
-		
-		List<Overtime> myRejectList=overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
+
+		List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myReject", myRejectList);
-		
+
 		return "form/OVT003";
 	}
 
-	
 	@GetMapping("/myReviseOt")
-	public String myReviseOt(Model model,HttpSession session) {
+	public String myReviseOt(Model model, HttpSession session) {
 		Staff staff = au.getAuthenticatedUser();
-		
-		List<Overtime> myReviseList=overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
+
+		List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myRevise", myReviseList);
-	
+
 		return "form/OVT003";
 	}
 
-	
 	@GetMapping("/history/{id}")
 	public String history(@PathVariable("id") int id, Model model) {
-		List<WorkflowHistory> wkhList=workFlowHistoryRepo.findWorkflowHistorybyOvertimeId(id);
-		model.addAttribute("workflowhistory",wkhList);
+		List<WorkflowHistory> wkhList = workFlowHistoryRepo.findWorkflowHistorybyOvertimeId(id);
+		model.addAttribute("workflowhistory", wkhList);
 		return "form/update";
 	}
 
 	List<OvertimeDetails> odList = new ArrayList<>();
+
 	@GetMapping("/reviseEdit/{id}")
 	public String reviseEdit(@PathVariable Integer id, Model model) {
-		Overtime overtime=overtimeRepo.findById(id).orElse(null);
-		model.addAttribute("reviseUpdate",overtime);
-		
-		for(OvertimeDetails de : odList) {
+		Overtime overtime = overtimeRepo.findById(id).orElse(null);
+		model.addAttribute("reviseUpdate", overtime);
+
+		for (OvertimeDetails de : odList) {
 			OvertimeDetails d = overtimeDetailRepo.findById(de.getId()).orElse(null);
 			d.setStartDate(de.getStartDate());
 			d.setEndDate(de.getEndDate());
@@ -221,50 +278,48 @@ public class OvertimeController {
 			d.setOtTotalHour(de.getOtTotalHour());
 			overtimeDetailRepo.save(d);
 		}
-		if(odList.size() == 0) {
-			for(OvertimeDetails d : overtime.getOvertimeDetails()) {
-				model.addAttribute("reviseUpdateDetail", d);		
+		if (odList.size() == 0) {
+			for (OvertimeDetails d : overtime.getOvertimeDetails()) {
+				model.addAttribute("reviseUpdateDetail", d);
 			}
-		}else {
-			for(OvertimeDetails d : odList) {
+		} else {
+			for (OvertimeDetails d : odList) {
 				model.addAttribute("reviseUpdateDetail", d);
 			}
 		}
-		
-		
+
 		return "form/OVT002";
 	}
-	
+
 	@PostMapping("/reviseDetailSave")
-	public String reviseDetailSave(Overtime overtime,Model model) {
+	public String reviseDetailSave(Overtime overtime, Model model) {
 		Staff staff = au.getAuthenticatedUser();
-		
+
 		Overtime o = overtimeRepo.findById(overtime.getId());
 		o.setOtStatus(OvertimeStatus.PENDING);
 		System.out.println(o);
 		overtimeRepo.save(o);
-	
-		
-		
+
 		Workflow wf = workFlowRepo.findWorkflowByOvertimeId(o.getId());
-		
+
 		wf.setSender(staff.getStaffId());
 		wf.setSenderName(staff.getName());
 		wf.setReceiver(o.getCurrentNext());
-		Staff currentNext=staffRepo.findByStaffId(o.getCurrentNext());
+		Staff currentNext = staffRepo.findByStaffId(o.getCurrentNext());
 		wf.setReceiverName(currentNext.getName());
 		wf.setCreatedDate(LocalDate.now());
 		wf.setOtStatus(OvertimeStatus.PENDING);
 		wf.setOvertime(o);
 		workflowService.save(wf);
-		
+
 		return "redirect:/myRecord";
 	}
-	
-	@PostMapping ("/reviseDetailUpdateSave/{id}")
-	public String reviseDetailUpdateSave(@PathVariable Integer id,OvertimeDetails details,BindingResult result,Model  model) {
-		
-		if(result.hasErrors()) {
+
+	@PostMapping("/reviseDetailUpdateSave/{id}")
+	public String reviseDetailUpdateSave(@PathVariable Integer id, OvertimeDetails details, BindingResult result,
+			Model model) {
+
+		if (result.hasErrors()) {
 			details.setId(id);
 			return "form/OVT002";
 		}
@@ -280,27 +335,27 @@ public class OvertimeController {
 		if (startDate.equals(endDate)) {
 
 //			OT = ((Monthly Basic Pay X 12 Months) ÷ 52 Weeks / 48 Hour) * 2
-			
-			double salary=staff.getSalary();
+
+			double salary = staff.getSalary();
 			double ot = salary * 12;
-			double range=((ot)/52/48)*2;
+			double range = ((ot) / 52 / 48) * 2;
 
 			details.setOtTotalHour(t);
-			details.setOtRange(Math.round(t * range)); 
-			
+			details.setOtRange(Math.round(t * range));
+
 		} else {
-			double salary=staff.getSalary();
+			double salary = staff.getSalary();
 			double ot = salary * 12;
-			double range=((ot)/52/48)*2;
-			
+			double range = ((ot) / 52 / 48) * 2;
+
 			details.setOtTotalHour((t * d) + 1);
 			double totalhour = ((t * d) + 1);
-			details.setOtRange(Math.round(totalhour * range)); 
+			details.setOtRange(Math.round(totalhour * range));
 		}
-		
+
 		odList.add(details);
-		//todo
-		Overtime o =overtimeRepo.findByDetailId(id);
+		// todo
+		Overtime o = overtimeRepo.findByDetailId(id);
 		int i = o.getId();
 		return String.format("redirect:/reviseEdit/%s", i);
 	}
@@ -335,29 +390,27 @@ public class OvertimeController {
 		LocalTime startTime = overtimerDetails.getStartTime();
 		LocalTime endTime = overtimerDetails.getEndTime();
 
-
 		long t = startTime.until(endTime, ChronoUnit.HOURS);
 		if (startDate.equals(endDate)) {
 
 //			OT = ((Monthly Basic Pay X 12 Months) ÷ 52 Weeks / 48 Hour) * 2
-			
-			double salary=staff.getSalary();
+
+			double salary = staff.getSalary();
 			double ot = salary * 12;
-			double range=((ot)/52/48)*2;
+			double range = ((ot) / 52 / 48) * 2;
 
 			overtimerDetails.setOtTotalHour(t);
-			overtimerDetails.setOtRange(Math.round(t * range)); 
-			
+			overtimerDetails.setOtRange(Math.round(t * range));
+
 		} else {
-			double salary=staff.getSalary();
+			double salary = staff.getSalary();
 			double ot = salary * 12;
-			double range=((ot)/52/48)*2;
-			
+			double range = ((ot) / 52 / 48) * 2;
+
 			overtimerDetails.setOtTotalHour((t * d) + 1);
 			double totalhour = ((t * d) + 1);
-			overtimerDetails.setOtRange(Math.round(totalhour * range)); 
+			overtimerDetails.setOtRange(Math.round(totalhour * range));
 		}
-		
 
 		list.add(overtimerDetails);
 		return "redirect:/overtime";
@@ -388,8 +441,8 @@ public class OvertimeController {
 		Staff div = staffList.stream().filter(di -> di.getPositions().getName().equals("Division Head")).findFirst()
 				.orElseThrow(() -> new IllegalArgumentException("No data found"));
 
-		Staff hr=staffRepo.findHrPositon();
-		
+		Staff hr = staffRepo.findHrPositon();
+
 		// todo // to think about hr here
 
 		if (staff.getPositions().getName().equals("Project Manager")) {
@@ -404,7 +457,6 @@ public class OvertimeController {
 
 			session.setAttribute("projectName", pj.getName());
 			session.setAttribute("projectId", pj.getProjectId());
-			
 
 		} else if (staff.getPositions().getName().equals("Dept Head")) {
 			session.setAttribute("currentNext", div);
@@ -433,13 +485,11 @@ public class OvertimeController {
 			session.setAttribute("projectId", pj.getProjectId());
 		}
 		session.setAttribute("hrNext", hr);
-		session.setAttribute("hrId",hr.getStaffId());
-		
-		
+		session.setAttribute("hrId", hr.getStaffId());
+
 		return "redirect:/overtime";
 	}
 
-	
 	// testing overtime detail in list
 	@GetMapping("/overtime/edit/{reason}")
 	public String edit(@PathVariable String reason, Model model) {

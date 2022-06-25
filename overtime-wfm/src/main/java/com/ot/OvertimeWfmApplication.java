@@ -129,7 +129,7 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		teamService.save(team2);
 
 		
-		Staff staff1 = new Staff(1, "25-11111", "may su", 200000,
+		Staff staff1 = new Staff(1, "26-11111", "Cherry", 200000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff1.setRoles(Set.of(staffRole));
 		staff1.setProjects(Arrays.asList(pj1, pj2));

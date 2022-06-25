@@ -48,6 +48,8 @@ public class OvertimeDetails {
 	private double otRange;
 	@Column(name="OTTOTAL_HOURS")
 	private double otTotalHour;
+	@Column(name = "ACTUAL_WH")
+	private double actualWh;
 	
 	public int getId() {
 		return id;
@@ -105,6 +107,15 @@ public class OvertimeDetails {
 	}
 	public void setOtTotalHour(double otTotalHour) {
 		this.otTotalHour = otTotalHour;
+	}
+	
+	
+	
+	public double getActualWh() {
+		return actualWh;
+	}
+	public void setActualWh(double actualWh) {
+		this.actualWh = actualWh;
 	}
 	@Override
 	public String toString() {

@@ -1,5 +1,6 @@
 package com.ot.model;
 
+
 import java.util.Date;
 
 import javax.persistence.Entity;

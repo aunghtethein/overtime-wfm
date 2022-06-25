@@ -20,6 +20,7 @@ public class WorkingHourService {
 	public void store(MultipartFile file) {
 		try {
 			List<WH> whList = WorkingHourUtil.parseExcelFile(file.getInputStream());
+			System.out.println(whList);
 			for (WH h : whList) {
 				System.out.println("h:::::"+h);
 				
