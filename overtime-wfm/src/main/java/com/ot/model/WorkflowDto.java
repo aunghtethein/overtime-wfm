@@ -1,7 +1,7 @@
 package com.ot.model;
 
 import java.time.LocalDate;
-
+//This is Dto for Workflow
 public class WorkflowDto {
 	
 	private int id;

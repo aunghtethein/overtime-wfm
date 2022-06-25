@@ -19,8 +19,6 @@ public class Project {
 	@Column(name = "PROJECTID")
 	private String projectId;
 	
-	
-	
 	@ManyToMany(mappedBy = "projects")
 	private List<Staff> staffs;
 
@@ -56,7 +54,6 @@ public class Project {
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
-	
 	
 	public List<Staff> getStaffs() {
 		return staffs;

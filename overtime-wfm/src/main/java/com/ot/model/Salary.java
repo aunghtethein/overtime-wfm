@@ -1,6 +1,7 @@
 package com.ot.model;
-
+//This is Dto for salary upload excel file.
 public class Salary {
+	
 	private int no;
 	private String name;
 	private String staffId;

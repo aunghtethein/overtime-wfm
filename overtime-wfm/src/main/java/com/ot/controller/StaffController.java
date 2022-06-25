@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -88,7 +89,9 @@ public class StaffController {
 		staff.setStaffId(staffBean.getStaffId());
 		staff.setName(staffBean.getName());
 		staff.setSalary(staffBean.getSalary());
-		staff.setPassword(staffBean.getPassword());
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String hashPassword =encoder.encode(staffBean.getPassword());
+		staff.setPassword(hashPassword);
 		staff.setPositions(staffBean.getPositions());
 		staff.setProjects(staffBean.getProjects());
 		staff.setRoles(staffBean.getRoles());

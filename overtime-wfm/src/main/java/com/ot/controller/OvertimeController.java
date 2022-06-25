@@ -1,14 +1,13 @@
 package com.ot.controller;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.ot.model.Overtime;
 import com.ot.model.OvertimeDetails;
 import com.ot.model.OvertimeStatus;
@@ -47,15 +44,15 @@ public class OvertimeController {
 	@Autowired
 	private StaffRepo staffRepo;
 	@Autowired
-	private ProjectRepo pjRepo;
+	private ProjectRepo projectRepo;
 	@Autowired
 	private AuthenticatedUser au;
 	@Autowired
-	private OverTimeRepo otRepo;
+	private OverTimeRepo overtimeRepo;
 	@Autowired
 	private WorkFlowHistoryRepo workFlowHistoryRepo;
 	@Autowired
-	private OverTimeDetailsRepo detailRepo;
+	private OverTimeDetailsRepo overtimeDetailRepo;
 	@Autowired
 	private WorkFlowRepo workFlowRepo;
 	
@@ -73,7 +70,6 @@ public class OvertimeController {
 		session.setAttribute("staffId", staff.getStaffId());
 		session.setAttribute("staffName", staff.getName());
 
-
 		return "form/OVT001";
 	}
 
@@ -90,7 +86,7 @@ public class OvertimeController {
 		session.setAttribute("staffName", staff.getName());
 		Project pj = (Project) session.getAttribute("project");
 		
-		//hhz
+		
 		if (pj == null && list.size()==0) {
 			model.addAttribute("detailError", "Overtime Details is required!!");
 			model.addAttribute("error", "Project ID is required!!");
@@ -103,7 +99,6 @@ public class OvertimeController {
 			return "form/OVT001";
 		}
 		
-		// Staff staff = au.getAuthenticatedUser();
 		overtime.setStaffs(staff);
 
 		boolean od = list.stream().allMatch(a -> a.getOtTotalHour() <= 3);
@@ -153,7 +148,7 @@ public class OvertimeController {
 	@GetMapping("/myRecord")
 	public String myOvertime(Model model) {
 		Staff staff = au.getAuthenticatedUser();
-		List<Overtime> list = otRepo.findOvertimebyStaffId(staff.getId());
+		List<Overtime> list = overtimeRepo.findOvertimebyStaffId(staff.getId());
 		model.addAttribute("myotlist", list);
 		return "form/OVT003";
 	}
@@ -162,7 +157,7 @@ public class OvertimeController {
 	public String myPendingOt(Model model) {
 		Staff staff = au.getAuthenticatedUser();
 	
-		List<Overtime> myPendingList=otRepo.findPendingOvertimeByStaffId(staff.getStaffId());
+		List<Overtime> myPendingList=overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myPending", myPendingList);
 	
 		return "form/OVT003";
@@ -173,7 +168,7 @@ public class OvertimeController {
 	public String myApproveOt(Model model) {
 		Staff staff = au.getAuthenticatedUser();
 		
-		List<Overtime> myApproveList=otRepo.findApproveOvertimeByStaffId(staff.getStaffId());
+		List<Overtime> myApproveList=overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myApprove", myApproveList);
 		
 		return "form/OVT003";
@@ -183,7 +178,7 @@ public class OvertimeController {
 	public String myRejectOt(Model model) {
 		Staff staff = au.getAuthenticatedUser();
 		
-		List<Overtime> myRejectList=otRepo.findRejectOvertimeByStaffId(staff.getStaffId());
+		List<Overtime> myRejectList=overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myReject", myRejectList);
 		
 		return "form/OVT003";
@@ -194,7 +189,7 @@ public class OvertimeController {
 	public String myReviseOt(Model model,HttpSession session) {
 		Staff staff = au.getAuthenticatedUser();
 		
-		List<Overtime> myReviseList=otRepo.findReviseOvertimeByStaffId(staff.getStaffId());
+		List<Overtime> myReviseList=overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
 		model.addAttribute("myRevise", myReviseList);
 	
 		return "form/OVT003";
@@ -211,11 +206,11 @@ public class OvertimeController {
 	List<OvertimeDetails> odList = new ArrayList<>();
 	@GetMapping("/reviseEdit/{id}")
 	public String reviseEdit(@PathVariable Integer id, Model model) {
-		Overtime overtime=otRepo.findById(id).orElse(null);
+		Overtime overtime=overtimeRepo.findById(id).orElse(null);
 		model.addAttribute("reviseUpdate",overtime);
 		
 		for(OvertimeDetails de : odList) {
-			OvertimeDetails d = detailRepo.findById(de.getId()).orElse(null);
+			OvertimeDetails d = overtimeDetailRepo.findById(de.getId()).orElse(null);
 			d.setStartDate(de.getStartDate());
 			d.setEndDate(de.getEndDate());
 			d.setStartTime(de.getStartTime());
@@ -224,7 +219,7 @@ public class OvertimeController {
 			d.setOtRange(de.getOtRange());
 			d.setDayType(de.getDayType());
 			d.setOtTotalHour(de.getOtTotalHour());
-			detailRepo.save(d);
+			overtimeDetailRepo.save(d);
 		}
 		if(odList.size() == 0) {
 			for(OvertimeDetails d : overtime.getOvertimeDetails()) {
@@ -244,10 +239,10 @@ public class OvertimeController {
 	public String reviseDetailSave(Overtime overtime,Model model) {
 		Staff staff = au.getAuthenticatedUser();
 		
-		Overtime o = otRepo.findById(overtime.getId());
+		Overtime o = overtimeRepo.findById(overtime.getId());
 		o.setOtStatus(OvertimeStatus.PENDING);
 		System.out.println(o);
-		otRepo.save(o);
+		overtimeRepo.save(o);
 	
 		
 		
@@ -305,7 +300,7 @@ public class OvertimeController {
 		
 		odList.add(details);
 		//todo
-		Overtime o =otRepo.findByDetailId(id);
+		Overtime o =overtimeRepo.findByDetailId(id);
 		int i = o.getId();
 		return String.format("redirect:/reviseEdit/%s", i);
 	}
@@ -380,7 +375,7 @@ public class OvertimeController {
 
 		List<Staff> staffList = staffRepo.findStaffByProjectId(id);
 
-		Project pj = pjRepo.findProjectById(id);
+		Project pj = projectRepo.findProjectById(id);
 		session.setAttribute("project", pj);
 		Staff staff = au.getAuthenticatedUser();
 

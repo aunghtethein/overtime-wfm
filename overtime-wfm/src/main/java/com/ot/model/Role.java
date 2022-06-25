@@ -24,8 +24,6 @@ public class Role {
 	public Role(String name) {
 	}
 	
-	
-	
 	@ManyToMany
 	@JoinTable( name="ROLE_PRIVILEGE")
 	private Set<Privilege> privileges ;
@@ -48,9 +46,6 @@ public class Role {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-
 	
 	public Set<Privilege> getPrivileges() {
 		return privileges;

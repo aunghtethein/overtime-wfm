@@ -21,8 +21,7 @@ public class ExcelUtil {
 			Workbook workbook = new XSSFWorkbook(is);
 
 			Sheet sheet = workbook.getSheet("Sheet1");
-			// System.out.println(sheet);
-
+		
 			Iterator<Row> rows = sheet.iterator();
 			List<TeamStructure> list = new ArrayList<>();
 
@@ -66,7 +65,7 @@ public class ExcelUtil {
 			workbook.close();
 			return list;
 		} catch (IOException e) {
-			throw new RuntimeException("iiiiiiiiiiiiiiiiii! -> message = " + e.getMessage());
+			throw new RuntimeException("Runtime Fail! -> message = " + e.getMessage());
 		}
 
 	}

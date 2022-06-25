@@ -1,9 +1,6 @@
 package com.ot.model;
 
-
 import java.util.List;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,8 +18,6 @@ public class Team {
 	private int id;
 	@Column(name="NAME")
 	private String name;
-	
-	
 	
 	public Team(int id, String name) {
 		super();

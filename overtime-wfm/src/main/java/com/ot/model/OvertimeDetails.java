@@ -49,11 +49,6 @@ public class OvertimeDetails {
 	@Column(name="OTTOTAL_HOURS")
 	private double otTotalHour;
 	
-	/*
-	 * @ManyToOne(fetch = FetchType.LAZY)
-	 * 
-	 * @JoinColumn(name = "overtimeId") private Overtime overtime;
-	 */
 	public int getId() {
 		return id;
 	}
@@ -111,9 +106,6 @@ public class OvertimeDetails {
 	public void setOtTotalHour(double otTotalHour) {
 		this.otTotalHour = otTotalHour;
 	}
-	
-	
-	
 	@Override
 	public String toString() {
 		return "OvertimeDetails [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", startTime="

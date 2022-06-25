@@ -59,8 +59,7 @@ public class SalaryUtil {
 			return list;
 
 		} catch (IOException e) {
-			// e.printStackTrace();
-			throw new RuntimeException("Fail: -> " + e.getMessage());
+			throw new RuntimeException("Runtime Fail: -> " + e.getMessage());
 		}
 
 	}

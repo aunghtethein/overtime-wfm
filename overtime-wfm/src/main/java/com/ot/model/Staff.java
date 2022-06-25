@@ -1,9 +1,7 @@
 package com.ot.model;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
-public class Staff implements Serializable{
-	private static final long serialVersionUID = 1L;
+public class Staff  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -46,7 +42,6 @@ public class Staff implements Serializable{
 	@JoinTable(name = "STAFF_TEAM")
 	private List<Team> teams;
 	
-	// one to may (join table) if have to use already data while set up
 	@ManyToMany
 	@JoinTable(name = "STAFF_PROJECT")
 	private List<Project> projects;
@@ -119,8 +114,6 @@ public class Staff implements Serializable{
 		this.positions = positions;
 	}
 
-	
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -128,8 +121,6 @@ public class Staff implements Serializable{
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-
-
 
 	public List<Team> getTeams() {
 		return teams;

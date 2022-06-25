@@ -123,9 +123,8 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		projectService.save(pj3);
 		projectService.save(pj4);
 		
-		
 		Team team1 = new Team(1, "Aeon");
-		Team team2 = new Team(2, "System");
+		Team team2 = new Team(2, "B1");
 		teamService.save(team1);
 		teamService.save(team2);
 
@@ -148,7 +147,7 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff2.setTeams(Arrays.asList(team1));
 		staffService.save(staff2);
 
-		Staff staff3 = new Staff(3, "25-44444", "Kyaw Kyaw", 300000,
+		Staff staff3 = new Staff(3, "25-33333", "Kyaw Kyaw", 300000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff3.setRoles(Set.of(deptRole));
 		staff3.setProjects(Arrays.asList(pj1));
@@ -156,14 +155,14 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff3.setTeams(Arrays.asList(team1));
 		staffService.save(staff3);
 
-		Staff staff4 = new Staff(4, "25-66666", "Hla Hla", 200000,
+		Staff staff4 = new Staff(4, "25-44444", "Hla Hla", 200000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff4.setRoles(Set.of(divRole));
 		staff4.setProjects(Arrays.asList(pj1));
 		staff4.setPositions(position7);
 		staffService.save(staff4);
 
-		Staff staff5 = new Staff(5, "25-77777", "Gi Gi", 200000,
+		Staff staff5 = new Staff(5, "25-55555", "Gi Gi", 200000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff5.setRoles(Set.of(pmRole));
 		staff5.setProjects(Arrays.asList(pj2));
@@ -171,7 +170,7 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff5.setTeams(Arrays.asList(team2));
 		staffService.save(staff5);
 
-		Staff staff6 = new Staff(6, "25-33333", "Kyi Kyi", 300000,
+		Staff staff6 = new Staff(6, "25-66666", "Kyi Kyi", 300000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff6.setRoles(Set.of(deptRole));
 		staff6.setProjects(Arrays.asList(pj2));
@@ -179,7 +178,7 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff6.setTeams(Arrays.asList(team2));
 		staffService.save(staff6);
 
-		Staff staff7 = new Staff(7, "25-55555", "Wana", 300000,
+		Staff staff7 = new Staff(7, "25-77777", "Wana", 300000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
 		staff7.setRoles(Set.of(divRole));
 		staff7.setProjects(Arrays.asList(pj2));
@@ -192,14 +191,7 @@ public class OvertimeWfmApplication implements CommandLineRunner {
 		staff8.setRoles(Set.of(hrRole));
 		staff8.setPositions(position5);
 		staffService.save(staff8);
-
-		Staff staff9 = new Staff(9, "25-99999", "may su kyi", 200000,
-				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");
-		staff9.setRoles(Set.of(staffRole));
-		staff9.setProjects(Arrays.asList(pj2));
-		staff9.setPositions(position1);
-		staff9.setTeams(Arrays.asList(team2));
-		staffService.save(staff9);
+		
 
 		Staff staff10 = new Staff(10, "25-00000", "admin", 200000,
 				"$2a$12$159jVZ.3Yg7FVHArY2gBG.KXa.AmYH1YJ1KWicwcJvuWd4.Y7L1di");

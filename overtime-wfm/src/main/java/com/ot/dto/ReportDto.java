@@ -2,10 +2,7 @@ package com.ot.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-
 import com.ot.model.DayType;
-import com.ot.model.Overtime;
 
 public class ReportDto {
 

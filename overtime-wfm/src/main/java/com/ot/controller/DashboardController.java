@@ -27,348 +27,183 @@ public class DashboardController {
 	@Autowired
 	private WorkFlowRepo workflowRepo;
 	@Autowired
-	private WorkFlowHistoryRepo whRepo;
+	private WorkFlowHistoryRepo workflowHistoryRepo;
 	@Autowired
 	private OverTimeRepo overtimeRepo;
 	@Autowired
 	private ProjectRepo projectRepo;
 	@Autowired
-	private StaffRepo staffrepo;
+	private StaffRepo staffRepo;
 	@Autowired
 	private TeamRepo teamRepo;
-	
-//	@GetMapping("/home/dsh001")
-//	public String staffDSH001(Model model) {
-//		int staff = staffrepo.count(true);
-//		int team = teamRepo.count(true);
-//		int project = projectRepo.count(true);
-//		List<Project> list = projectRepo.tenProject();
-//		
-//		model.addAttribute("staff", staff);
-//		model.addAttribute("team", team);
-//		model.addAttribute("project", project);
-//		model.addAttribute("list",list);
-//
-//		return "admin/DSH001";
-//	}
-//
-//	//Staff Dashboard for Count
-//	@GetMapping("/home/dsh003")
-//	public String myotDSH003(Model model) {
-//
-//		Count(model);
-//		return "form/DSH003";
-//	}
-//	//PM,Dept,Div Dashboard for count and link
-//	@GetMapping("/home/dsh002/manageot")
-//	public String manageDSH002(Model model) {
-//
-//		manageCount(model);
-//		return "form/DSH002";
-//	}
-//	
-//
-//	
-//	
-//
-//	@GetMapping("/home/dsh002")
-//	public String hrDSH002(Model model) {
-//		Staff staff = au.getAuthenticatedUser();
-//
-//		List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myPendingCount", myPendingList.size());
-//
-//		List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myApproveCount", myApproveList.size());
-//
-//		List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myRejectCount", myRejectList.size());
-//
-//		List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myReviseCount", myReviseList.size());
-//		
-//		List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
-//		System.out.println("pjlist " + pjList);
-//		List<String> pjNameList = new ArrayList<>();
-//		List<Double> otList = new ArrayList<>();
-//
-//		for (Project p : pjList) {
-//			System.out.println(p);
-//			List<Overtime> oList = overtimeRepo.findApprovedProjectId(p.getId(), staff.getStaffId());
-//			List<Double> dList = new ArrayList<>();
-//			for (Overtime o : oList) {
-//				double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
-//
-//				dList.add(result);
-//			}
-//			Double r = dList.stream().reduce(0.0, Double::sum);
-//			System.out.println(r);
-//
-//			otList.add(r);
-//			pjNameList.add(p.getName());
-//		}
-//
-//		model.addAttribute("name", pjNameList);
-//		model.addAttribute("ot", otList);
-//			return "form/DSH002";
-//	}
-//	
-//	private void Count(Model model) {
-//		Staff staff = au.getAuthenticatedUser();
-//
-//		List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myPendingCount", myPendingList.size());
-//
-//		List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myApproveCount", myApproveList.size());
-//
-//		List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myRejectCount", myRejectList.size());
-//
-//		List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
-//		model.addAttribute("myReviseCount", myReviseList.size());
-//		
-//		List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
-//		System.out.println("pjlist " + pjList);
-//		List<String> pjNameList = new ArrayList<>();
-//		List<Double> otList = new ArrayList<>();
-//
-//		for (Project p : pjList) {
-//			System.out.println(p);
-//			List<Overtime> oList = overtimeRepo.findProjectId(p.getId(), staff.getStaffId());
-//			List<Double> dList = new ArrayList<>();
-//			for (Overtime o : oList) {
-//				double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
-//
-//				dList.add(result);
-//			}
-//			Double r = dList.stream().reduce(0.0, Double::sum);
-//			System.out.println(r);
-//
-//			otList.add(r);
-//			pjNameList.add(p.getName());
-//		}
-//
-//		model.addAttribute("name", pjNameList);
-//		model.addAttribute("ot", otList);
-//	}
-//	
-//	private void manageCount(Model model) {
-//		Staff staff = au.getAuthenticatedUser();
-//
-//		List<Workflow> pendingWfList = workflowRepo.findWorkflowByPending(staff.getStaffId());
-//		model.addAttribute("pendingCount", pendingWfList.size());
-//
-//		List<Workflow> reviseWfList = workflowRepo.findWorkflowByRevise(staff.getStaffId());
-//		model.addAttribute("reviseCount", reviseWfList.size());
-//
-//		List<WorkflowHistory> rejectList = whRepo.findWorkflowByReject(staff.getStaffId());
-//		model.addAttribute("rejectCount", rejectList.size());
-//
-//		List<WorkflowHistory> approveList = whRepo.findWorkflowByApproved(staff.getStaffId());
-//		model.addAttribute("approveCount", approveList.size());
-//	
-//		List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
-//		System.out.println("pjlist " + pjList);
-//		List<String> pjNameList = new ArrayList<>();
-//		List<Double> otList = new ArrayList<>();
-//
-//		for (Project p : pjList) {
-//			System.out.println(p);
-//			List<Overtime> oList = overtimeRepo.findApprovedProjectId(p.getId(), staff.getStaffId());
-//			List<Double> dList = new ArrayList<>();
-//			for (Overtime o : oList) {
-//				double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
-//
-//				dList.add(result);
-//			}
-//			Double r = dList.stream().reduce(0.0, Double::sum);
-//			System.out.println(r);
-//
-//			otList.add(r);
-//			pjNameList.add(p.getName());
-//		}
-//
-//		model.addAttribute("name", pjNameList);
-//		model.addAttribute("ot", otList);
-//	}
 
-	
-	  
-	  @GetMapping("/home/dsh001")
-	  public String staffDSH001(Model model) {
-	    int staff = staffrepo.count(true);
-	    int team = teamRepo.count(true);
-	    int project = projectRepo.count(true);
-	    List<Project> list = projectRepo.tenProject();
-	    
-	    model.addAttribute("staff", staff);
-	    model.addAttribute("team", team);
-	    model.addAttribute("project", project);
-	    model.addAttribute("list",list);
+	@GetMapping("/home/dsh001")
+	public String staffDSH001(Model model) {
+		int staff = staffRepo.count(true);
+		int team = teamRepo.count(true);
+		int project = projectRepo.count(true);
+		List<Project> list = projectRepo.tenProject();
 
-	    return "admin/DSH001";
-	  }
-	  
-	  
-	  @GetMapping("/home/dsh002")
-	  public String mainContent(Model model) {
-	    Count(model);
-	    return "form/DSH002";
-	  }
+		model.addAttribute("staff", staff);
+		model.addAttribute("team", team);
+		model.addAttribute("project", project);
+		model.addAttribute("list", list);
 
-	  @GetMapping("/home/dsh002/manageot")
-	  public String manageOt(Model model) {
-		  Staff staff = au.getAuthenticatedUser();
-	   
-		  List<Workflow> pendingWfList = workflowRepo.findWorkflowByPending(staff.getStaffId());
-		    model.addAttribute("pendingCount", pendingWfList.size());
+		return "admin/DSH001";
+	}
 
-		    List<Workflow> reviseWfList = workflowRepo.findWorkflowByRevise(staff.getStaffId());
-		    model.addAttribute("reviseCount", reviseWfList.size());
+	@GetMapping("/home/dsh002")
+	public String mainContent(Model model) {
+		Count(model);
+		return "form/DSH002";
+	}
 
-		    List<WorkflowHistory> rejectList = whRepo.findWorkflowByReject(staff.getStaffId());
-		    model.addAttribute("rejectCount", rejectList.size());
+	@GetMapping("/home/dsh002/manageot")
+	public String manageOt(Model model) {
+		Staff staff = au.getAuthenticatedUser();
 
-		    List<WorkflowHistory> approveList = whRepo.findWorkflowByApproved(staff.getStaffId());
-		    model.addAttribute("approveCount", approveList.size());
+		List<Workflow> pendingWfList = workflowRepo.findWorkflowByPending(staff.getStaffId());
+		model.addAttribute("pendingCount", pendingWfList.size());
 
-		    List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
-		    model.addAttribute("myPendingCount", myPendingList.size());
+		List<Workflow> reviseWfList = workflowRepo.findWorkflowByRevise(staff.getStaffId());
+		model.addAttribute("reviseCount", reviseWfList.size());
 
-		    List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
-		    model.addAttribute("myApproveCount", myApproveList.size());
+		List<WorkflowHistory> rejectList = workflowHistoryRepo.findWorkflowByReject(staff.getStaffId());
+		model.addAttribute("rejectCount", rejectList.size());
 
-		    List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
-		    model.addAttribute("myRejectCount", myRejectList.size());
+		List<WorkflowHistory> approveList = workflowHistoryRepo.findWorkflowByApproved(staff.getStaffId());
+		model.addAttribute("approveCount", approveList.size());
 
-		    List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
-		    model.addAttribute("myReviseCount", myReviseList.size());
-		    
-		    List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
-		    System.out.println("pjlist " + pjList);
-		    List<String> pjNameList = new ArrayList<>();
-		    List<Double> otList = new ArrayList<>();
+		List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myPendingCount", myPendingList.size());
 
-		    for (Project p : pjList) {
-		      System.out.println(p);
-		      List<Overtime> oList = overtimeRepo.findCurrent(p.getId(), staff.getStaffId());
-		      List<Double> dList = new ArrayList<>();
-		      for (Overtime o : oList) {
-		        double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
+		List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myApproveCount", myApproveList.size());
 
-		        dList.add(result);
-		      }
-		      Double r = dList.stream().reduce(0.0, Double::sum);
-		      System.out.println(r);
+		List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myRejectCount", myRejectList.size());
 
-		      otList.add(r);
-		      pjNameList.add(p.getName());
-		    }
+		List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myReviseCount", myReviseList.size());
 
-		    model.addAttribute("name", pjNameList);
-		    model.addAttribute("ot", otList);
-			return "form/DSH002";
-	  }
- 
+		List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
+		System.out.println("pjlist " + pjList);
+		List<String> pjNameList = new ArrayList<>();
+		List<Double> otList = new ArrayList<>();
 
-	  private void Count(Model model) {
-	    Staff staff = au.getAuthenticatedUser();
+		for (Project p : pjList) {
+			System.out.println(p);
+			List<Overtime> oList = overtimeRepo.findCurrent(p.getId(), staff.getStaffId());
+			List<Double> dList = new ArrayList<>();
+			for (Overtime o : oList) {
+				double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
 
-	    List<Workflow> pendingWfList = workflowRepo.findWorkflowByPending(staff.getStaffId());
-	    model.addAttribute("pendingCount", pendingWfList.size());
+				dList.add(result);
+			}
+			Double r = dList.stream().reduce(0.0, Double::sum);
+			System.out.println(r);
 
-	    List<Workflow> reviseWfList = workflowRepo.findWorkflowByRevise(staff.getStaffId());
-	    model.addAttribute("reviseCount", reviseWfList.size());
+			otList.add(r);
+			pjNameList.add(p.getName());
+		}
 
-	    List<WorkflowHistory> rejectList = whRepo.findWorkflowByReject(staff.getStaffId());
-	    model.addAttribute("rejectCount", rejectList.size());
+		model.addAttribute("name", pjNameList);
+		model.addAttribute("ot", otList);
+		return "form/DSH002";
+	}
 
-	    List<WorkflowHistory> approveList = whRepo.findWorkflowByApproved(staff.getStaffId());
-	    model.addAttribute("approveCount", approveList.size());
+	private void Count(Model model) {
+		Staff staff = au.getAuthenticatedUser();
 
-	    List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myPendingCount", myPendingList.size());
+		List<Workflow> pendingWfList = workflowRepo.findWorkflowByPending(staff.getStaffId());
+		model.addAttribute("pendingCount", pendingWfList.size());
 
-	    List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myApproveCount", myApproveList.size());
+		List<Workflow> reviseWfList = workflowRepo.findWorkflowByRevise(staff.getStaffId());
+		model.addAttribute("reviseCount", reviseWfList.size());
 
-	    List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myRejectCount", myRejectList.size());
+		List<WorkflowHistory> rejectList = workflowHistoryRepo.findWorkflowByReject(staff.getStaffId());
+		model.addAttribute("rejectCount", rejectList.size());
 
-	    List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myReviseCount", myReviseList.size());
-	    
-	    List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
-	    System.out.println("pjlist " + pjList);
-	    List<String> pjNameList = new ArrayList<>();
-	    List<Double> otList = new ArrayList<>();
+		List<WorkflowHistory> approveList = workflowHistoryRepo.findWorkflowByApproved(staff.getStaffId());
+		model.addAttribute("approveCount", approveList.size());
 
-	    for (Project p : pjList) {
-	      System.out.println(p);
-	      List<Overtime> oList = overtimeRepo.findProjectId(p.getId(), staff.getStaffId());
-	      List<Double> dList = new ArrayList<>();
-	      for (Overtime o : oList) {
-	        double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
+		List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myPendingCount", myPendingList.size());
 
-	        dList.add(result);
-	      }
-	      Double r = dList.stream().reduce(0.0, Double::sum);
-	      System.out.println(r);
+		List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myApproveCount", myApproveList.size());
 
-	      otList.add(r);
-	      pjNameList.add(p.getName());
-	    }
+		List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myRejectCount", myRejectList.size());
 
-	    model.addAttribute("name", pjNameList);
-	    model.addAttribute("ot", otList);
-	  }
+		List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myReviseCount", myReviseList.size());
 
-	  
-	  @GetMapping("/home/dsh003")
-	  public String staffDashboard(Model model) {
-	    Staff staff = au.getAuthenticatedUser();
+		List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
+		System.out.println("pjlist " + pjList);
+		List<String> pjNameList = new ArrayList<>();
+		List<Double> otList = new ArrayList<>();
 
-	    List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myPendingCount", myPendingList.size());
+		for (Project p : pjList) {
+			System.out.println(p);
+			List<Overtime> oList = overtimeRepo.findProjectId(p.getId(), staff.getStaffId());
+			List<Double> dList = new ArrayList<>();
+			for (Overtime o : oList) {
+				double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
 
-	    List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myApproveCount", myApproveList.size());
-	
-	    List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myRejectCount", myRejectList.size());
+				dList.add(result);
+			}
+			Double r = dList.stream().reduce(0.0, Double::sum);
+			System.out.println(r);
 
-	    List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
-	    model.addAttribute("myReviseCount", myReviseList.size());
-	    
-	    List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
-	    System.out.println("pjlist " + pjList);
-	    List<String> pjNameList = new ArrayList<>();
-	    List<Double> otList = new ArrayList<>();
+			otList.add(r);
+			pjNameList.add(p.getName());
+		}
 
-	    for (Project p : pjList) {
-	      System.out.println(p);
-	      List<Overtime> oList = overtimeRepo.findProjectId(p.getId(), staff.getStaffId());
-	      List<Double> dList = new ArrayList<>();
-	      for (Overtime o : oList) {
-	        double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
+		model.addAttribute("name", pjNameList);
+		model.addAttribute("ot", otList);
+	}
 
-	        dList.add(result);
-	      }
-	      Double r = dList.stream().reduce(0.0, Double::sum);
-	      System.out.println(r);
+	@GetMapping("/home/dsh003")
+	public String staffDashboard(Model model) {
+		Staff staff = au.getAuthenticatedUser();
 
-	      otList.add(r);
-	      pjNameList.add(p.getName());
-	    }
+		List<Overtime> myPendingList = overtimeRepo.findPendingOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myPendingCount", myPendingList.size());
 
-	    model.addAttribute("name", pjNameList);
-	    model.addAttribute("ot", otList);
-	      return "form/DSH003";
-	  }
-	  
-	
-	
-	
-	
+		List<Overtime> myApproveList = overtimeRepo.findApproveOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myApproveCount", myApproveList.size());
+
+		List<Overtime> myRejectList = overtimeRepo.findRejectOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myRejectCount", myRejectList.size());
+
+		List<Overtime> myReviseList = overtimeRepo.findReviseOvertimeByStaffId(staff.getStaffId());
+		model.addAttribute("myReviseCount", myReviseList.size());
+
+		List<Project> pjList = projectRepo.findProjectByStaffId(staff.getStaffId());
+		System.out.println("pjlist " + pjList);
+		List<String> pjNameList = new ArrayList<>();
+		List<Double> otList = new ArrayList<>();
+
+		for (Project p : pjList) {
+			System.out.println(p);
+			List<Overtime> oList = overtimeRepo.findProjectId(p.getId(), staff.getStaffId());
+			List<Double> dList = new ArrayList<>();
+			for (Overtime o : oList) {
+				double result = o.getOvertimeDetails().stream().mapToDouble(a -> a.getOtTotalHour()).sum();
+
+				dList.add(result);
+			}
+			Double r = dList.stream().reduce(0.0, Double::sum);
+			System.out.println(r);
+
+			otList.add(r);
+			pjNameList.add(p.getName());
+		}
+
+		model.addAttribute("name", pjNameList);
+		model.addAttribute("ot", otList);
+		return "form/DSH003";
+	}
+
 }

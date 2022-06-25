@@ -35,7 +35,6 @@ public class Workflow {
 	private Overtime overtime;
 
 
-	
 	public int getId() {
 		return id;
 	}
